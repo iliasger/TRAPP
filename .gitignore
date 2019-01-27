@@ -1,0 +1,13 @@
+data/*
+*/.idea/*
+*/target/*
+*.iml
+.DS_Store
+build/*
+dist/*
+**.pyc
+datasets/*
+output/*
+TRAPP.egg-info/*
+.ipynb_checkpoints/*
+notebooks/.ipynb_checkpoints/*
