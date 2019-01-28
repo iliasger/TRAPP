@@ -15,5 +15,6 @@ setup(
         'msgpack-python',
         'colorama',
         'Dijkstar',
+        'numpy'
     ]
 )

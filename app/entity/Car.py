@@ -219,12 +219,12 @@ class Car:
             # traci.vehicle.setAccel(self.id, self.acceleration)
             # traci.vehicle.setDecel(self.id, self.deceleration)
             # traci.vehicle.setImperfection(self.id, self.imperfection)
-            if self.smartCar:
-                # set color to red
-                if self.currentRouterResult.isVictim:
-                    traci.vehicle.setColor(self.id, (0, 255, 0, 0))
-                else:
-                    traci.vehicle.setColor(self.id, (255, 0, 0, 0))
+            # if self.smartCar:
+            #     # set color to red
+            #     if self.currentRouterResult.isVictim:
+            #         traci.vehicle.setColor(self.id, (0, 255, 0, 0))
+            #     else:
+            #         traci.vehicle.setColor(self.id, (255, 0, 0, 0))
             else:
                 # dump car is using SUMO default routing, so we reroute using the same target
                 # putting the next line left == ALL SUMO ROUTING
