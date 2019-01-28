@@ -54,6 +54,7 @@ class Simulation(object):
         Knowledge.globalCostFunction = Config.globalCostFunction
 
         Util.remove_overhead_and_streets_files()
+        Util.add_data_folder_if_missing()
 
         CSVLogger.logEvent("streets", [edge.id for edge in Network.routingEdges])
 
