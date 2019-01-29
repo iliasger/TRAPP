@@ -73,11 +73,13 @@ class CarRegistry(object):
         number_of_epos_plans = len([name for name in os.listdir('datasets/plans') if name.endswith("plans")])
         print "Number of EPOS plans: " + str(number_of_epos_plans)
 
-        cls.replaceAll("conf/epos.properties", "numAgents=", "numAgents=" + str(number_of_epos_plans))
-        cls.replaceAll("conf/epos.properties", "planDim=", "planDim=" + str(Network.edgesCount() * Knowledge.planning_steps))
-        cls.replaceAll("conf/epos.properties", "alpha=", "alpha=" + str(Knowledge.alpha))
-        cls.replaceAll("conf/epos.properties", "beta=", "beta=" + str(Knowledge.beta))
-        cls.replaceAll("conf/epos.properties", "globalCostFunction=", "globalCostFunction=" + str(Knowledge.globalCostFunction))
+        Knowledge.time_of_last_EPOS_invocation = tick
+        
+        cls.change_EPOS_config("conf/epos.properties", "numAgents=", "numAgents=" + str(number_of_epos_plans))
+        cls.change_EPOS_config("conf/epos.properties", "planDim=", "planDim=" + str(Network.edgesCount() * Knowledge.planning_steps))
+        cls.change_EPOS_config("conf/epos.properties", "alpha=", "alpha=" + str(Knowledge.alpha))
+        cls.change_EPOS_config("conf/epos.properties", "beta=", "beta=" + str(Knowledge.beta))
+        cls.change_EPOS_config("conf/epos.properties", "globalCostFunction=", "globalCostFunction=" + str(Knowledge.globalCostFunction))
 
         cls.run_epos_apply_results(False, cars_to_indexes, tick)
 
@@ -114,7 +116,7 @@ class CarRegistry(object):
 
 
     @classmethod
-    def replaceAll(cls, filename, searchExp, replaceExp):
+    def change_EPOS_config(cls, filename, searchExp, replaceExp):
         for line in fileinput.input(filename, inplace=True):
             if searchExp in line:
                 line = replaceExp + "\n"

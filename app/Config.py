@@ -3,7 +3,7 @@
 ######################################
 
 # True if we want to use the SUMO GUI
-sumoUseGUI = False  # False
+sumoUseGUI = True  # False
 
 debug = False  # False
 
@@ -25,30 +25,31 @@ sumoNet = "./app/map/eichstaedt.net.xml"
 # The total number of cars we use in our simulation
 totalCarCounter = 600
 
-#
-simulation_horizon = 301
+# How long the simulation will run
+simulation_horizon = 1000
 
 ######################################
 ##### CONFIGURATION OF PLANNING ######
 ######################################
 
-#
+# whether the simulation should start with an EPOS invocation
 start_with_epos_optimization = False
 
-#
-planning_period = 150
+# How frequently EPOS planning will be invoked (runtime-configurable parameter)
+planning_period = 100
 
 #
-planning_steps = 3
+planning_steps = 2
 
 #
-planning_step_horizon = 100
+planning_step_horizon = 50
 
-# double from [0, 1], unfairness + selfishness <= 1, unfairness
+# double from [0, 1], unfairness
 alpha = 0
 
-# double from [0, 1], unfairness + selfishness <= 1, selfishness or local objective
-beta = 0
+# double from [0, 1], selfishness or local objective
+beta = 1
+# unfairness + selfishness <= 1
 # alpha*unfairness + beta*local_cost + (1-alpha-beta)*global_costs
 
 # Suggested values : "XCORR", VAR", "RSS", "RMSE"
@@ -58,4 +59,7 @@ globalCostFunction="VAR"
 #### CONFIGURATION OF ADAPTATION #####
 ######################################
 
-adaptation_period = 130
+adaptation_period = 100
+
+# possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
+adaptation_strategy = "load_balancing"

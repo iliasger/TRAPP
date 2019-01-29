@@ -7,3 +7,7 @@ planning_step_horizon = None
 alpha = None
 beta = None
 globalCostFunction=None
+
+# This parameter should only be queried by the adaptation logic, but not changed
+
+time_of_last_EPOS_invocation = None

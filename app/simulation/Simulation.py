@@ -14,7 +14,7 @@ import time
 from app.logging import CSVLogger
 
 import app.Util as Util
-from app.adaptation.Adaptation import Adaptation
+from app.adaptation import perform_adaptation
 from app.adaptation import Knowledge
 
 current_milli_time = lambda: int(round(time.time() * 1000))
@@ -67,11 +67,12 @@ class Simulation(object):
         CarRegistry.applyCarCounter()
 
         if Config.start_with_epos_optimization:
-            CarRegistry.replaceAll("conf/epos.properties", "numAgents=", "numAgents=" + str(Config.totalCarCounter))
-            CarRegistry.replaceAll("conf/epos.properties", "planDim=", "planDim=" + str(Network.edgesCount() * Knowledge.planning_steps))
-            CarRegistry.replaceAll("conf/epos.properties", "alpha=", "alpha=" + str(Knowledge.alpha))
-            CarRegistry.replaceAll("conf/epos.properties", "beta=", "beta=" + str(Knowledge.beta))
-            CarRegistry.replaceAll("conf/epos.properties", "globalCostFunction=", "globalCostFunction=" + str(Knowledge.globalCostFunction))
+            Knowledge.time_of_last_EPOS_invocation = 0
+            CarRegistry.change_EPOS_config("conf/epos.properties", "numAgents=", "numAgents=" + str(Config.totalCarCounter))
+            CarRegistry.change_EPOS_config("conf/epos.properties", "planDim=", "planDim=" + str(Network.edgesCount() * Knowledge.planning_steps))
+            CarRegistry.change_EPOS_config("conf/epos.properties", "alpha=", "alpha=" + str(Knowledge.alpha))
+            CarRegistry.change_EPOS_config("conf/epos.properties", "beta=", "beta=" + str(Knowledge.beta))
+            CarRegistry.change_EPOS_config("conf/epos.properties", "globalCostFunction=", "globalCostFunction=" + str(Knowledge.globalCostFunction))
 
             cars_to_indexes = {}
             for i in range(Config.totalCarCounter):
@@ -118,4 +119,4 @@ class Simulation(object):
                 CarRegistry.do_epos_planning(cls.tick)
 
             if (cls.tick % Config.adaptation_period) == 0:
-                Adaptation.sense_and_adapt(cls.tick)
+                perform_adaptation(cls.tick)
