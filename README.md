@@ -1,2 +1,2 @@
 # TRAPP
-TRAPP framework for Traffic Reconfiguration and Adaptive Planning
+TRAPP framework for Traffic Reconfiguration via Adaptive Participatory Planning
