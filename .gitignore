@@ -11,3 +11,5 @@ output/*
 TRAPP.egg-info/*
 .ipynb_checkpoints/*
 notebooks/.ipynb_checkpoints/*
+log/*
+.idea/*
