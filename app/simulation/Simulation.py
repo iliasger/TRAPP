@@ -115,8 +115,8 @@ class Simulation(object):
                 print("Simulation horizon reached!")
                 return
 
-            if (cls.tick % Knowledge.planning_period) == 0:
-                CarRegistry.do_epos_planning(cls.tick)
-
             if (cls.tick % Config.adaptation_period) == 0:
                 perform_adaptation(cls.tick)
+
+            if (cls.tick % Knowledge.planning_period) == 0:
+                CarRegistry.do_epos_planning(cls.tick)

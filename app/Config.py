@@ -26,7 +26,7 @@ sumoNet = "./app/map/eichstaedt.net.xml"
 totalCarCounter = 600
 
 # How long the simulation will run
-simulation_horizon = 1000
+simulation_horizon = 400
 
 ######################################
 ##### CONFIGURATION OF PLANNING ######
@@ -38,10 +38,10 @@ start_with_epos_optimization = False
 # How frequently EPOS planning will be invoked (runtime-configurable parameter)
 planning_period = 100
 
-#
+# the number of steps to look in the future while planning
 planning_steps = 2
 
-#
+# how long a planning step should be
 planning_step_horizon = 50
 
 # double from [0, 1], unfairness
@@ -59,7 +59,8 @@ globalCostFunction="VAR"
 #### CONFIGURATION OF ADAPTATION #####
 ######################################
 
+# how often adaptation should be triggered
 adaptation_period = 100
 
-# possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
+# the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
 adaptation_strategy = "load_balancing"

@@ -14,8 +14,7 @@ class AvoidOverLoadedStreets(Strategy):
         overloaded_streets = []
         for street, utilization in utilizations.iteritems():
             if utilization > 0.4:
-                print "overloaded street"
-                print street
+                print "overloaded street: " + str(street)
                 overloaded_streets.append(street)
         return overloaded_streets
 
@@ -26,6 +25,8 @@ class AvoidOverLoadedStreets(Strategy):
         return avoid_streets_signal
 
     def execute(self, avoid_streets_signal):
+        if len(avoid_streets_signal) > 0:
+            print "Sending signal to avoid overloaded streets!"
         with open('datasets/plans/signal.target', 'w') as signal_fil:
             signal_writer = csv.writer(signal_fil, dialect='excel')
             signal_writer.writerow(avoid_streets_signal)

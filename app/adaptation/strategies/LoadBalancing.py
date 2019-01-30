@@ -12,9 +12,9 @@ class LoadBalancing(Strategy):
         return mean(trip_overheads)
 
     def plan(self, mean_overhead):
-        if mean_overhead > 1.5:
+        if mean_overhead > 3.5:
             print "Mean overhead threshold reached!"
-            return 0.5
+            return 0.9
 
     def execute(self, beta_value):
         print "Setting beta to " + str(beta_value)
