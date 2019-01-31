@@ -26,7 +26,7 @@ sumoNet = "./app/map/eichstaedt.net.xml"
 totalCarCounter = 600
 
 # How long the simulation will run
-simulation_horizon = 400
+simulation_horizon = 300
 
 ######################################
 ##### CONFIGURATION OF PLANNING ######
