@@ -1,13 +1,15 @@
 from app.adaptation.strategies import get_adaptation_stategy
-
+from app.adaptation.Knowledge import time_of_last_adaptation
 
 def perform_adaptation(tick):
 
-    print "*******************"
+    print "*******************************"
     print "Starting adaptation at tick " + str(tick)
-    print "*******************"
+    print "*******************************"
 
-    strategy = get_adaptation_stategy()
+    time_of_last_adaptation = tick
+    strategy = get_adaptation_stategy(tick)
+    print "Invoking strategy: " + str(strategy.__class__.__name__)
 
     monitor_data = strategy.monitor()
     if monitor_data:
@@ -17,4 +19,4 @@ def perform_adaptation(tick):
             if plan_data:
                 strategy.execute(plan_data)
 
-    print "*******************"
+    print "*******************************"

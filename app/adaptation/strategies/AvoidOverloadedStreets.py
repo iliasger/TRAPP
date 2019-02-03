@@ -2,18 +2,21 @@ from app.adaptation.Strategy import Strategy
 from app.adaptation.Util import *
 from app.adaptation import Knowledge
 from app.network.Network import Network
+from app.Config import adaptation_period
 import csv
+from numpy import mean
 
 
 class AvoidOverLoadedStreets(Strategy):
 
     def monitor(self):
-        return Util.calculate_street_utilizations()
+        return Util.get_street_utilizations(Knowledge.time_of_last_adaptation, adaptation_period)[0]
 
     def analyze(self, utilizations):
         overloaded_streets = []
-        for street, utilization in utilizations.iteritems():
-            if utilization > 0.4:
+        for street, utilizations in utilizations.iteritems():
+            mean_utilization = mean(utilizations)
+            if mean_utilization > 0.4:
                 print "overloaded street: " + str(street)
                 overloaded_streets.append(street)
         return overloaded_streets

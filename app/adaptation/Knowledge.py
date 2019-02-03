@@ -10,4 +10,5 @@ globalCostFunction=None
 
 # This parameter should only be queried by the adaptation logic, but not changed
 
-time_of_last_EPOS_invocation = None
+time_of_last_EPOS_invocation = 0
+time_of_last_adaptation = 0

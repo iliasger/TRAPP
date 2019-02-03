@@ -77,7 +77,7 @@ class Simulation(object):
             cars_to_indexes = {}
             for i in range(Config.totalCarCounter):
                 cars_to_indexes["car-" + str(i)] = i
-            CarRegistry.run_epos_apply_results(True, cars_to_indexes)
+            CarRegistry.run_epos_apply_results(True, cars_to_indexes, 0)
 
         cls.loop()
 

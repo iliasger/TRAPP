@@ -2,6 +2,9 @@
 
 class Strategy:
 
+    def __init__(self, tick):
+        self.tick = tick
+
     def monitor(self):
         pass
 
@@ -12,4 +15,4 @@ class Strategy:
         pass
 
     def execute(self, plan_data):
-        print "SSSS"
+        pass

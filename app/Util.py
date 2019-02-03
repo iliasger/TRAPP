@@ -36,8 +36,8 @@ def prepare_epos_input_data_folders():
     if os.path.exists("datasets/plans"):
         plans_folder = os.listdir("datasets/plans")
         for item in plans_folder:
-            if item.endswith(".plan"):
-                os.remove(item)
+            if item.endswith(".plans"):
+                os.remove("datasets/plans/" + item)
     else:
         os.makedirs("datasets/plans")
 
