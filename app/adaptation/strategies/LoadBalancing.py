@@ -16,7 +16,7 @@ class LoadBalancing(Strategy):
         return mean_overhead
 
     def plan(self, mean_overhead):
-        if mean_overhead > 1.2:
+        if mean_overhead > 3.5:
             print "Mean overhead threshold reached!"
             return 0.9
         else:
