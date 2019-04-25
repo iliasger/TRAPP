@@ -178,6 +178,7 @@ class Car:
             for i in range(Knowledge.planning_steps):
                 if i< len(all_routes):
                     d = all_routes[i]
+                    # print [edge.id for edge in Network.routingEdges]
                     big_row += [d[edge.id] if edge.id in d else 0 for edge in Network.routingEdges]
                 else:
                     big_row += [0 for edge in Network.routingEdges]
@@ -291,7 +292,15 @@ class Car:
                     raise RuntimeError
                 streets_for_interval[m["edgeID"]] = occupancy
 
+        # self.write_trip_time(trip_time)
+
         return all_streets
+
+    def write_trip_time(self, trip_time):
+        with open('results/trip_times.csv', 'ab') as results_file:
+            results_writer = csv.writer(results_file, dialect='excel')
+            results_writer.writerow([trip_time])
+
 
     def remove(self):
         """" removes this car from the sumo simulation through traci """

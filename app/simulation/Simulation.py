@@ -44,14 +44,39 @@ class Simulation(object):
             pass
 
     @classmethod
-    def start(cls):
-
+    def applySimulationConfigFromFile(cls):
         Knowledge.planning_period = Config.planning_period
         Knowledge.planning_step_horizon = Config.planning_step_horizon
         Knowledge.planning_steps = Config.planning_steps
         Knowledge.alpha = Config.alpha
         Knowledge.beta = Config.beta
         Knowledge.globalCostFunction = Config.globalCostFunction
+
+    @classmethod
+    def customizeSimulationConfig(cls, random_seed=None, simulation_horizon=None, adaptation_period=None,
+                                  planning_period=None, planning_step_horizon=None, planning_steps=None,
+                                  alpha=None, beta=None, globalCostFunction=None):
+        if random_seed is not None:
+            Config.random_seed = random_seed
+        if simulation_horizon is not None:
+            Config.simulation_horizon = simulation_horizon
+        if adaptation_period is not None:
+            Config.adaptation_period = adaptation_period
+        if planning_period is not None:
+            Knowledge.planning_period = planning_period
+        if planning_step_horizon is not None:
+            Knowledge.planning_step_horizon = planning_step_horizon
+        if planning_steps is not None:
+            Knowledge.planning_steps = planning_steps
+        if alpha is not None:
+            Knowledge.alpha = alpha
+        if beta is not None:
+            Knowledge.beta = beta
+        if globalCostFunction is not None:
+            Knowledge.globalCostFunction = globalCostFunction
+
+    @classmethod
+    def start(cls):
 
         Util.remove_overhead_and_streets_files()
         Util.add_data_folder_if_missing()
@@ -79,6 +104,7 @@ class Simulation(object):
                 cars_to_indexes["car-" + str(i)] = i
             CarRegistry.run_epos_apply_results(True, cars_to_indexes, 0)
 
+        cls.tick = 0
         cls.loop()
 
     @classmethod
@@ -111,12 +137,12 @@ class Simulation(object):
                     CarRegistry.totalCarCounter) + " # avgTripOverhead: " + str(
                     CarRegistry.totalTripOverheadAverage))
 
+            if (cls.tick % Config.adaptation_period) == 0:
+                perform_adaptation(cls.tick)
+
             if Config.simulation_horizon == cls.tick:
                 print("Simulation horizon reached!")
                 return
-
-            if (cls.tick % Config.adaptation_period) == 0:
-                perform_adaptation(cls.tick)
 
             if (cls.tick % Knowledge.planning_period) == 0:
                 CarRegistry.do_epos_planning(cls.tick)

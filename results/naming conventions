@@ -1,0 +1,6 @@
+Naming convention for files: 
+
+<type> _ steps_horizon - planning_steps - planning_period - alpha - beta - tick
+
+where <type> is the one of "actual" or "predicted"
+and   <tick> is the simulation tick at which the data are recorded

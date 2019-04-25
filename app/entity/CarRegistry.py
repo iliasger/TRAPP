@@ -39,13 +39,16 @@ class CarRegistry(object):
 
     @classmethod
     def applyCarCounter(cls):
+        cls.carIndexCounter = 0
+        cls.cars = {}
         """ syncs the value of the carCounter to the SUMO simulation """
-        while len(CarRegistry.cars) < cls.totalCarCounter:
+        while len(cls.cars) < cls.totalCarCounter:
             # to less cars -> add new
-            c = Car("car-" + str(CarRegistry.carIndexCounter))
+            c = Car("car-" + str(cls.carIndexCounter))
             cls.carIndexCounter += 1
             cls.cars[c.id] = c
             c.addToSimulation(0, True)
+            # print "car-" + str(cls.carIndexCounter)
         while len(CarRegistry.cars) > cls.totalCarCounter:
             # to many cars -> remove cars
             (k, v) = CarRegistry.cars.popitem()

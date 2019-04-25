@@ -3,14 +3,14 @@
 ######################################
 
 # True if we want to use the SUMO GUI
-sumoUseGUI = True  # False
+sumoUseGUI = False  # False
 
 debug = False  # False
 
 # which seed to be used in the random functions, for repeatability
 random_seed = 1
 
-epos_jar_path = "/Users/gerostat/Documents/research/EPOS CROWDNAV/release-0.0.1/epos-tutorial.jar"
+epos_jar_path = "/Users/gerostat/Documents/research/TRAPP-EPOS/release-0.0.1/epos-tutorial.jar"
 
 ######################################
 #### CONFIGURATION OF SIMULATION #####
@@ -33,10 +33,10 @@ simulation_horizon = 300
 ######################################
 
 # whether the simulation should start with an EPOS invocation
-start_with_epos_optimization = False
+start_with_epos_optimization = True
 
 # How frequently EPOS planning will be invoked (runtime-configurable parameter)
-planning_period = 100
+planning_period = 1000
 
 # the number of steps to look in the future while planning
 planning_steps = 2
@@ -48,7 +48,7 @@ planning_step_horizon = 50
 alpha = 0
 
 # double from [0, 1], selfishness or local objective
-beta = 1
+beta = 0
 # unfairness + selfishness <= 1
 # alpha*unfairness + beta*local_cost + (1-alpha-beta)*global_costs
 
@@ -60,7 +60,7 @@ globalCostFunction="VAR"
 ######################################
 
 # how often adaptation should be triggered
-adaptation_period = 100
+adaptation_period = 1000
 
 # the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
-adaptation_strategy = "load_balancing"
+adaptation_strategy = "tune_planning_resolution"

@@ -11,10 +11,12 @@ from sumo import SUMOConnector, SUMODependency
 import Config
 import traci, sys
 import random
+from app.adaptation import Knowledge
 
 
-def start(processID, parallelMode,useGUI):
+def start(processID, parallelMode, useGUI):
 
+    print "Config.random_seed: " + str(Config.random_seed)
     random.seed(Config.random_seed)
 
     """ main entry point into the application """
@@ -38,8 +40,13 @@ def start(processID, parallelMode,useGUI):
     CustomRouter.init()
     # Start sumo in the background
     SUMOConnector.start()
+
     info("\n# SUMO-Application started OK!", Fore.GREEN)
     # Start the simulation
+
+    print "Knowledge.planning_steps: " + str(Knowledge.planning_steps)
+    print "Knowledge.planning_step_horizon: " + str(Knowledge.planning_step_horizon)
+
     Simulation.start()
     # Simulation ended, so we shutdown
     info(Fore.RED + '# Shutdown' + Fore.RESET)
