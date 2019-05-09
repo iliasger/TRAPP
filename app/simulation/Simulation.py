@@ -55,7 +55,10 @@ class Simulation(object):
     @classmethod
     def customizeSimulationConfig(cls, random_seed=None, simulation_horizon=None, adaptation_period=None,
                                   planning_period=None, planning_step_horizon=None, planning_steps=None,
-                                  alpha=None, beta=None, globalCostFunction=None):
+                                  alpha=None, beta=None, globalCostFunction=None, log_baseline_result=None,
+                                  log_overheads=None, log_utilizations=None, do_adaptation=None,
+                                  do_EPOS_planning=None, multiple_car_routes=None
+                                  ):
         if random_seed is not None:
             Config.random_seed = random_seed
         if simulation_horizon is not None:
@@ -75,15 +78,30 @@ class Simulation(object):
         if globalCostFunction is not None:
             Knowledge.globalCostFunction = globalCostFunction
 
+        if log_baseline_result is not None:
+            Config.log_baseline_result = log_baseline_result
+        if log_overheads is not None:
+            Config.log_overheads = log_overheads
+        if log_utilizations is not None:
+            Config.log_utilizations = log_utilizations
+        if do_adaptation is not None:
+            Config.do_adaptation = do_adaptation
+        if do_EPOS_planning is not None:
+            Config.do_EPOS_planning = do_EPOS_planning
+        if multiple_car_routes is not None:
+            Config.multiple_car_routes = multiple_car_routes
+
     @classmethod
     def start(cls):
 
         Util.remove_overhead_and_streets_files()
         Util.add_data_folder_if_missing()
 
-        CSVLogger.logEvent("streets", [edge.id for edge in Network.routingEdges])
+        if Config.log_utilizations:
+            CSVLogger.logEvent("streets", [edge.id for edge in Network.routingEdges])
 
-        Util.prepare_epos_input_data_folders()
+        if Config.do_EPOS_planning:
+            Util.prepare_epos_input_data_folders()
 
         """ start the simulation """
         info("# Start adding initial cars to the simulation", Fore.MAGENTA)
@@ -91,7 +109,7 @@ class Simulation(object):
         cls.applyFileConfig()
         CarRegistry.applyCarCounter()
 
-        if Config.start_with_epos_optimization:
+        if Config.do_EPOS_planning and Config.start_with_epos_optimization:
             Knowledge.time_of_last_EPOS_invocation = 0
             CarRegistry.change_EPOS_config("conf/epos.properties", "numAgents=", "numAgents=" + str(Config.totalCarCounter))
             CarRegistry.change_EPOS_config("conf/epos.properties", "planDim=", "planDim=" + str(Network.edgesCount() * Knowledge.planning_steps))
@@ -128,21 +146,26 @@ class Simulation(object):
             for removedCarId in traci.simulation.getSubscriptionResults()[122]:
                 CarRegistry.findById(removedCarId).setArrived(cls.tick)
 
-            CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
+            if Config.log_utilizations:
+                CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
 
+            current_car_count = traci.vehicle.getIDCount()
             # print status update if we are not running in parallel mode
             if (cls.tick % 100) == 0:
-                print("Simulation -> Step:" + str(cls.tick) + " # Driving cars: " + str(
-                    traci.vehicle.getIDCount()) + "/" + str(
-                    CarRegistry.totalCarCounter) + " # avgTripOverhead: " + str(
-                    CarRegistry.totalTripOverheadAverage))
+                print("Simulation -> Step:" + str(cls.tick) +
+                      " # Driving cars: " + str(current_car_count) + "/" + str(CarRegistry.totalCarCounter) +
+                      " # avgTripOverhead: " + str(CarRegistry.totalTripOverheadAverage))
 
-            if (cls.tick % Config.adaptation_period) == 0:
+            if Config.do_adaptation and (cls.tick % Config.adaptation_period) == 0:
                 perform_adaptation(cls.tick)
 
             if Config.simulation_horizon == cls.tick:
                 print("Simulation horizon reached!")
                 return
 
-            if (cls.tick % Knowledge.planning_period) == 0:
+            if not Config.multiple_car_routes and current_car_count == 0:
+                print("All cars reached their destinations!")
+                return
+
+            if Config.do_EPOS_planning and (cls.tick % Knowledge.planning_period) == 0:
                 CarRegistry.do_epos_planning(cls.tick)

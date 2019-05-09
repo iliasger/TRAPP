@@ -7,6 +7,18 @@ sumoUseGUI = False  # False
 
 debug = False  # False
 
+log_overheads = True
+
+log_utilizations = True
+
+log_baseline_result = False
+
+do_adaptation = True
+
+do_EPOS_planning = True
+
+multiple_car_routes = True
+
 # which seed to be used in the random functions, for repeatability
 random_seed = 1
 
@@ -23,10 +35,10 @@ sumoConfig = "./app/map/eichstaedt.sumo.cfg"
 sumoNet = "./app/map/eichstaedt.net.xml"
 
 # The total number of cars we use in our simulation
-totalCarCounter = 600
+totalCarCounter = 200
 
 # How long the simulation will run
-simulation_horizon = 300
+simulation_horizon = 1000
 
 ######################################
 ##### CONFIGURATION OF PLANNING ######

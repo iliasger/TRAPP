@@ -82,11 +82,16 @@ class Car:
                                                                 CarRegistry.totalTripOverheadAverage,
                                                                 tripOverhead)
 
-            CSVLogger.logEvent("overheads", [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
+            if Config.log_overheads:
+                CSVLogger.logEvent("overheads", [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
                                             minimalCosts, tripOverhead, self.id, self.driver_preference])
 
+            if Config.log_baseline_result:
+                CSVLogger.log_baseline_result("overheads", [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
+                                             minimalCosts, tripOverhead, self.id, self.driver_preference])
+
         # if car is still enabled, restart it in the simulation
-        if self.disabled is False:
+        if Config.multiple_car_routes and self.disabled is False:
             # add a round to the car
             self.rounds += 1
             self.addToSimulation(tick, False)
@@ -212,7 +217,7 @@ class Car:
             traci.vehicle.add(self.id, self.__createNewRoute(tick), tick, -4, -3)
             traci.vehicle.subscribe(self.id, (tc.VAR_ROAD_ID,))
 
-            if epos_prepare_inputs:
+            if Config.do_EPOS_planning and epos_prepare_inputs:
                 agent_ind = self.id[self.id.find("-")+1:]
                 self.create_epos_output_files(self.sourceID, self.targetID, tick, agent_ind)
 
