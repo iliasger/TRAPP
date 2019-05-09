@@ -17,7 +17,7 @@ if __name__ == "__main__":
         simulations = []
 
         for i in range(simulations_n):
-            simulations.append(Popen(["pythonw", "./baseline_run.py", str(k)]))
+            simulations.append(Popen(["python", "./baseline_run.py", str(k)]))
             print("Simulation " + str(k) + " started...")
             k += 1
 
