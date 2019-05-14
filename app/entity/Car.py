@@ -122,11 +122,13 @@ class Car:
             return self.__createNewRoute(tick)
 
     def create_epos_output_files_based_on_current_location(self, tick, agent_ind):
-        # currentEdgeID = traci.vehicle.getRoadID(self.id)
-        # if currentEdgeID not in Network.edgeIds:
-        #     currentEdgeID = traci.vehicle.getRoute(self.id)[traci.vehicle.getRouteIndex(self.id)+1]
         route = traci.vehicle.getRoute(self.id)
-        previousEdgeID = route[traci.vehicle.getRouteIndex(self.id)]
+        route_index = traci.vehicle.getRouteIndex(self.id)
+        if route_index < 0:
+            if Config.debug:
+                print self.id + "\thas not yet started its trip and won't be considered in the optimization."
+            return False
+        previousEdgeID = route[route_index]
         previousNodeID = Network.getEdgeIDsToNode(previousEdgeID).getID()
 
         if previousNodeID == self.targetID:
@@ -184,9 +186,9 @@ class Car:
 
             plans_writer.writerow(big_row)
 
-    def change_route(self, route, first_invocation):
+    def change_route(self, new_route, first_invocation):
         if first_invocation:
-            self.currentRouterResult.route = route
+            self.currentRouterResult.route = new_route
             traci.vehicle.setRoute(self.id, self.currentRouterResult.route)
         else:
             currentEdgeID = traci.vehicle.getRoadID(self.id)
@@ -194,7 +196,8 @@ class Car:
                 currentEdgeID = traci.vehicle.getRoute(self.id)[traci.vehicle.getRouteIndex(self.id)]
             try:
                 currentRoute = self.currentRouterResult.route
-                self.currentRouterResult.route = route
+
+                self.currentRouterResult.route = new_route
                 traci.vehicle.setRoute(self.id, [currentEdgeID] + self.currentRouterResult.route)
             except Exception as e:
                 self.currentRouterResult.route = currentRoute
@@ -208,27 +211,13 @@ class Car:
         """ adds this car to the simulation through the traci API """
         self.currentRouteBeginTick = tick
         try:
-            traci.vehicle.add(self.id, self.__createNewRoute(tick), tick, -4, -3)
+            traci.vehicle.add(self.id, self.__createNewRoute(tick))
             traci.vehicle.subscribe(self.id, (tc.VAR_ROAD_ID,))
 
             if epos_prepare_inputs:
                 agent_ind = self.id[self.id.find("-")+1:]
                 self.create_epos_output_files(self.sourceID, self.targetID, tick, agent_ind)
 
-            # ! currently disabled for performance reasons
-            # traci.vehicle.setAccel(self.id, self.acceleration)
-            # traci.vehicle.setDecel(self.id, self.deceleration)
-            # traci.vehicle.setImperfection(self.id, self.imperfection)
-            # if self.smartCar:
-            #     # set color to red
-            #     if self.currentRouterResult.isVictim:
-            #         traci.vehicle.setColor(self.id, (0, 255, 0, 0))
-            #     else:
-            #         traci.vehicle.setColor(self.id, (255, 0, 0, 0))
-            else:
-                # dump car is using SUMO default routing, so we reroute using the same target
-                # putting the next line left == ALL SUMO ROUTING
-                traci.vehicle.changeTarget(self.id, self.currentRouterResult.route[-1])
         except Exception as e:
             print("error adding" + str(e))
             # try recursion, as this should normally work

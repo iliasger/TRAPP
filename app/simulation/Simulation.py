@@ -100,6 +100,8 @@ class Simulation(object):
 
             # Check for removed cars and re-add them into the system
             for removedCarId in traci.simulation.getSubscriptionResults()[122]:
+                if Config.debug:
+                    print str(removedCarId) + "\treached its destination at tick " + str(cls.tick)
                 CarRegistry.findById(removedCarId).setArrived(cls.tick)
 
             CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
