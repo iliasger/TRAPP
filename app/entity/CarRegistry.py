@@ -111,12 +111,25 @@ class CarRegistry(object):
             with open('datasets/routes/agent_' + str(epos_id) + '.routes', 'r') as plans_file:
                 plans=plans_file.readlines()
             if Config.debug:
-                print "changing the route of " + str(c.id)
+                print "attempting to change the route of " + str(c.id)
             selected_route = plans[res[epos_id]].replace('\r', '').replace('\n', '').split(",")
             i += 1
+
+            previous_preference = c.driver_preference
+            previous_route = c.currentRouterResult.route
             c.change_route(selected_route, first_invocation)
             c.change_preference(res[epos_id])
-
+            current_preference = c.driver_preference
+            current_route = c.currentRouterResult.route
+            if Config.debug:
+                if previous_preference == current_preference:
+                    print "preference did not change: " + str(previous_preference)
+                else:
+                    print "preference changed. Old preference: " + str(previous_preference) + ", New preference: " + str(current_preference)
+                if set(current_route) <= set(previous_route):
+                    print "route did not change"
+                else:
+                    print "route changed"
 
     @classmethod
     def change_EPOS_config(cls, filename, searchExp, replaceExp):

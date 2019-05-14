@@ -144,6 +144,8 @@ class Simulation(object):
 
             # Check for removed cars and re-add them into the system
             for removedCarId in traci.simulation.getSubscriptionResults()[122]:
+                if Config.debug:
+                    print str(removedCarId) + "\treached its destination at tick " + str(cls.tick)
                 CarRegistry.findById(removedCarId).setArrived(cls.tick)
 
             if Config.log_utilizations:
