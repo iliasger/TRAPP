@@ -12,11 +12,10 @@ if __name__ == "__main__":
     alpha = 0
     beta = 0
 
-    # planning_step_horizons = [50, 60, 70, 80, 90, 100, 150, 200, 250, 300]
-    planning_step_horizons = [50, 60, 70]
+    planning_step_horizons = [50, 100, 150, 200, 250, 300]
 
     for planning_step_horizon in planning_step_horizons:
-        for random_seed in range(3):
+        for random_seed in range(50):
 
             print "########################"
             print "########################"
