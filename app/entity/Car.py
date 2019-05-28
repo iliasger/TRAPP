@@ -99,14 +99,20 @@ class Car:
     def __createNewRoute(self, tick):
         """ creates a new route to a random target and uploads this route to SUMO """
         # import here because python can not handle circular-dependencies
-        if self.targetID is None:
-            self.sourceID = random.choice(Network.nodes).getID()
-        else:
-            self.sourceID = self.targetID  # We start where we stopped
-        # random target
+
+        #if self.targetID is None:   #if the car does not have a target yet, set the initial position
+        #    self.sourceID = random.choice(Network.nodes).getID()
+        #else:
+        #    self.sourceID = self.targetID  # We start where we stopped, continuous trips
+
+        # random source,essentially teleporting the car, or treating like entirely new agent
+        self.sourceID = random.choice(Network.nodes).getID()
+        # random target, choosing a random node in the network
         self.targetID = random.choice(Network.nodes).getID()
         self.currentRouteID = self.id + "-" + str(self.rounds)
         # self.currentRouterResult = CustomRouter.route(self.sourceID, self.targetID, tick, self)
+
+
 
         if self.driver_preference=="min_length":
             self.currentRouterResult = CustomRouter.route_by_min_length(self.sourceID, self.targetID)

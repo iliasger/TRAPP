@@ -7,13 +7,13 @@ sumoUseGUI = False  # False
 
 debug = False  # False
 
-log_overheads = True
+log_overheads = True #try changing to false
 
-log_utilizations = True
+log_utilizations = True #try changing to false
 
 log_baseline_result = False
 
-do_adaptation = True
+do_adaptation = True #unnecisary to make it true, then uses knowledge
 
 do_EPOS_planning = True
 
@@ -22,7 +22,7 @@ multiple_car_routes = True
 # which seed to be used in the random functions, for repeatability
 random_seed = 1
 
-epos_jar_path = "/Users/gerostat/Documents/research/TRAPP-EPOS/release-0.0.1/epos-tutorial.jar"
+epos_jar_path = "/Users/gracejennings/Downloads/release-0.0.1/epos-tutorial.jar"
 
 ######################################
 #### CONFIGURATION OF SIMULATION #####
@@ -60,7 +60,7 @@ planning_step_horizon = 50
 alpha = 0
 
 # double from [0, 1], selfishness or local objective
-beta = 0
+beta = 0.6
 # unfairness + selfishness <= 1
 # alpha*unfairness + beta*local_cost + (1-alpha-beta)*global_costs
 
@@ -75,4 +75,11 @@ globalCostFunction="VAR"
 adaptation_period = 1000
 
 # the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
-adaptation_strategy = "tune_planning_resolution"
+adaptation_strategy = "load_balancing"
+
+######################################
+#### CONFIGURATION OF ADAPTATION #####
+######################################
+
+#the grid size for the network districts
+districtSize = 1000

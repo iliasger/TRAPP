@@ -2,7 +2,6 @@ import sumolib
 
 from app import Config
 from app.routing.RoutingEdge import RoutingEdge
-
 import os, sys
 
 # import of SUMO_HOME

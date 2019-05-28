@@ -5,6 +5,7 @@ sys.path.append(os.path.join(os.environ.get("SUMO_HOME"), "tools"))
 from app.logging import info
 from app.routing.CustomRouter import CustomRouter
 from app.network.Network import Network
+from app.districts.Districts import Districts
 from app.simulation.Simulation import Simulation
 from colorama import Fore
 from sumo import SUMOConnector, SUMODependency
@@ -34,8 +35,11 @@ def start(processID, parallelMode, useGUI):
 
     # Load the sumo map we are using into Python
     Network.loadNetwork()
+    Districts.loadDistricts()
     info(Fore.GREEN + "# Map loading OK! " + Fore.RESET)
     info(Fore.CYAN + "# Nodes: " + str(Network.nodesCount()) + " / Edges: " + str(Network.edgesCount()) + Fore.RESET)
+
+
 
     # After the network is loaded, we init the router
     CustomRouter.init()

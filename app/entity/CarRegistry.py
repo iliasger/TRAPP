@@ -98,10 +98,10 @@ class CarRegistry(object):
     def selectOptimalRoutes(cls, output_folder_for_latest_run, first_invocation, cars_to_indexes):
 
         with open(output_folder_for_latest_run + '/selected-plans.csv', 'r') as results:
-            line_id = 1
+            line_id = 1 #starts at 1 because line zero just lists all the agents
             for line in results:
-                if line_id == 41:
-                    res = [int(x) for x in line.split(",")[2:]]
+                if line_id == 41:   #goes until the last line, hardcoded 41 because 41 is the last line in the file
+                    res = [int(x) for x in line.split(",")[2:]] #why would x only want to be index 2->end (!! 2 skips the first two entries, te zero and the entry number)
                     break
                 line_id += 1
 
@@ -112,7 +112,7 @@ class CarRegistry(object):
                 plans=plans_file.readlines()
             if Config.debug:
                 print "attempting to change the route of " + str(c.id)
-            selected_route = plans[res[epos_id]].replace('\r', '').replace('\n', '').split(",")
+            selected_route = plans[res[epos_id]].replace('\r', '').replace('\n', '').split(",")#just replacing a carrige return
             i += 1
 
             previous_preference = c.driver_preference
