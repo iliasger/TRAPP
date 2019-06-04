@@ -1,29 +1,39 @@
 ######################################
+# HOW TO USE THIS FILE
+# Copy its contents to a file named 'Config.py' under the 'app' folder and fill in the missing paths
+######################################
+
+######################################
 ####### GENERAL CONFIGURATION ########
 ######################################
 
 # True if we want to use the SUMO GUI
-sumoUseGUI = True  # False
+sumoUseGUI = True
 
-debug = False  # False
+# True for printing extra info
+debug = False
 
 # which seed to be used in the random functions, for repeatability
 random_seed = 1
 
-epos_jar_path = "/Users/gerostat/Documents/research/EPOS CROWDNAV/release-0.0.1/epos-tutorial.jar"
+# The path to EPOS jar that is called from Python for planning
+# TODO
+epos_jar_path = "<path to EPOS jar>"
 
 ######################################
 #### CONFIGURATION OF SIMULATION #####
 ######################################
 
-# The network config (links to the net) we use for our simulation
-sumoConfig = "./app/map/eichstaedt.sumo.cfg"
+# The SUMO config (links to the network) we use for our simulation
+# TODO
+sumoConfig = "<path to SUMO cfg file>"
 
-# The network net we use for our simulation
-sumoNet = "./app/map/eichstaedt.net.xml"
+# The SUMO network file we use for our simulation
+# TODO
+sumoNet = "<path to SUMO net.xml file>"
 
 # The total number of cars we use in our simulation
-totalCarCounter = 600
+totalCarCounter = 500
 
 # How long the simulation will run
 simulation_horizon = 300
@@ -39,10 +49,10 @@ start_with_epos_optimization = False
 planning_period = 100
 
 # the number of steps to look in the future while planning
-planning_steps = 2
+planning_steps = 1
 
 # how long a planning step should be
-planning_step_horizon = 50
+planning_step_horizon = 100
 
 # double from [0, 1], unfairness
 alpha = 0
