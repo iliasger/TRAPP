@@ -93,32 +93,32 @@ class Car:
 
     def __createNewRoute(self, tick):
         """ creates a new route to a random target and uploads this route to SUMO """
-        # import here because python can not handle circular-dependencies
         if self.targetID is None:
-            self.sourceID = random.choice(Network.nodes).getID()
+            self.sourceID = Network.get_random_node_id_of_passenger_edge(random)
         else:
             self.sourceID = self.targetID  # We start where we stopped
-        # random target
-        self.targetID = random.choice(Network.nodes).getID()
+        self.targetID = Network.get_random_node_id_of_passenger_edge(random)
         self.currentRouteID = self.id + "-" + str(self.rounds)
-        # self.currentRouterResult = CustomRouter.route(self.sourceID, self.targetID, tick, self)
 
-        if self.driver_preference=="min_length":
-            self.currentRouterResult = CustomRouter.route_by_min_length(self.sourceID, self.targetID)
-        elif self.driver_preference=="max_speed":
-            self.currentRouterResult = CustomRouter.route_by_max_speed(self.sourceID, self.targetID)
-        else:
-            self.currentRouterResult = CustomRouter.minimalRoute(self.sourceID, self.targetID)
+        try:
+            if self.driver_preference=="min_length":
+                self.currentRouterResult = CustomRouter.route_by_min_length(self.sourceID, self.targetID)
+            elif self.driver_preference=="max_speed":
+                self.currentRouterResult = CustomRouter.route_by_max_speed(self.sourceID, self.targetID)
+            else:
+                self.currentRouterResult = CustomRouter.minimalRoute(self.sourceID, self.targetID)
 
-        if len(self.currentRouterResult.route) > 0:
-            traci.route.add(self.currentRouteID, self.currentRouterResult.route)
-            # set color to red
-            return self.currentRouteID
-        else:
+            if len(self.currentRouterResult.route) > 0:
+                traci.route.add(self.currentRouteID, self.currentRouterResult.route)
+                return self.currentRouteID
+            else:
+                if Config.debug:
+                    print "vehicle " + str(self.id) + " could not be added, retrying"
+                return self.__createNewRoute(tick)
+
+        except:
             if Config.debug:
-                print "exception when adding route for car " + str(self.id)
-
-            # recursion aka. try again as this should work!
+                print "vehicle " + str(self.id) + " could not be added [exception], retrying"
             return self.__createNewRoute(tick)
 
     def create_epos_output_files_based_on_current_location(self, tick, agent_ind):
