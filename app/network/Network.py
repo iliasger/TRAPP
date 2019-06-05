@@ -20,6 +20,7 @@ class Network(object):
     nodes = None
     nodeIds = None
     edgeIds = None
+    passenger_edges = None
     routingEdges = None
 
     @classmethod
@@ -34,10 +35,11 @@ class Network(object):
     def __applyNetwork(cls, net):
         """ internal method for applying the values of a SUMO map """
         cls.nodeIds = map(lambda x: x.getID(), net.getNodes())  # type: list[str]
-        cls.edgeIds = map(lambda x: x.getID(), net.getEdges())  # type: list[str]
+        cls.edgeIds = map(lambda x: x.getID(), net.getEdges(withInternal=False))  # type: list[str]
         cls.nodes = net.getNodes()
-        cls.edges = net.getEdges()
-        cls.routingEdges = map(lambda x: RoutingEdge(x), net.getEdges())
+        cls.edges = net.getEdges(withInternal=False)
+        cls.passenger_edges = [e for e in net.getEdges(withInternal=False) if e.allows("passenger")]
+        cls.routingEdges = map(lambda x: RoutingEdge(x), cls.passenger_edges)
 
     @classmethod
     def nodesCount(cls):
@@ -65,3 +67,8 @@ class Network(object):
     @classmethod
     def getPositionOfEdge(cls, edge):
         return edge.getFromNode().getCoord()  # @todo average two
+
+    @classmethod
+    def get_random_node_id_of_passenger_edge(cls, random):
+        edge = random.choice(Network.passenger_edges)
+        return edge.getFromNode().getID()

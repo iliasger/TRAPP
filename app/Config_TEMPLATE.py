@@ -1,11 +1,17 @@
 ######################################
+# HOW TO USE THIS FILE
+# Copy its contents to a file named 'Config.py' under the 'app' folder and fill in the missing paths
+######################################
+
+######################################
 ####### GENERAL CONFIGURATION ########
 ######################################
 
 # True if we want to use the SUMO GUI
-sumoUseGUI = False  # False
+sumoUseGUI = True
 
-debug = False  # False
+# True for printing extra info
+debug = False
 
 log_overheads = True #try changing to false
 
@@ -22,20 +28,24 @@ multiple_car_routes = True
 # which seed to be used in the random functions, for repeatability
 random_seed = 1
 
-epos_jar_path = "/Users/gracejennings/Downloads/release-0.0.1/epos-tutorial.jar"
+# The path to EPOS jar that is called from Python for planning
+# TODO
+epos_jar_path = "<path to EPOS jar>"
 
 ######################################
 #### CONFIGURATION OF SIMULATION #####
 ######################################
 
-# The network config (links to the net) we use for our simulation
-sumoConfig = "./app/map/eichstaedt.sumo.cfg"
+# The SUMO config (links to the network) we use for our simulation
+# TODO
+sumoConfig = "<path to SUMO cfg file>"
 
-# The network net we use for our simulation
-sumoNet = "./app/map/eichstaedt.net.xml"
+# The SUMO network file we use for our simulation
+# TODO
+sumoNet = "<path to SUMO net.xml file>"
 
 # The total number of cars we use in our simulation
-totalCarCounter = 200
+totalCarCounter = 500
 
 # How long the simulation will run
 simulation_horizon = 1000
@@ -51,10 +61,10 @@ start_with_epos_optimization = True
 planning_period = 1000
 
 # the number of steps to look in the future while planning
-planning_steps = 2
+planning_steps = 1
 
 # how long a planning step should be
-planning_step_horizon = 50
+planning_step_horizon = 100
 
 # double from [0, 1], unfairness
 alpha = 0
@@ -75,6 +85,7 @@ globalCostFunction="VAR"
 adaptation_period = 1000
 
 # the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
+<<<<<<< HEAD:app/Config.py
 adaptation_strategy = "load_balancing"
 
 ######################################
@@ -83,3 +94,6 @@ adaptation_strategy = "load_balancing"
 
 #the grid size for the network districts
 districtSize = 1000
+=======
+adaptation_strategy = "load_balancing"
+>>>>>>> experiments:app/Config_TEMPLATE.py

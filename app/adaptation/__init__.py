@@ -1,15 +1,16 @@
 from app.adaptation.strategies import get_adaptation_stategy
 from app.adaptation.Knowledge import time_of_last_adaptation
+from colorama import Fore
+from app.logging import info
 
 def perform_adaptation(tick):
 
-    print "*******************************"
-    print "Starting adaptation at tick " + str(tick)
-    print "*******************************"
+    info("*******************************", Fore.CYAN)
+    info("Starting adaptation at tick " + str(tick), Fore.CYAN)
+    info("*******************************", Fore.CYAN)
 
-    time_of_last_adaptation = tick
     strategy = get_adaptation_stategy(tick)
-    print "Invoking strategy: " + str(strategy.__class__.__name__)
+    info("Invoking strategy: " + str(strategy.__class__.__name__), Fore.CYAN)
 
     monitor_data = strategy.monitor()
     if monitor_data:
@@ -19,4 +20,4 @@ def perform_adaptation(tick):
             if plan_data:
                 strategy.execute(plan_data)
 
-    print "*******************************"
+    info("*******************************", Fore.CYAN)

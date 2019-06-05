@@ -152,11 +152,10 @@ class Simulation(object):
                 CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
 
             current_car_count = traci.vehicle.getIDCount()
-            # print status update if we are not running in parallel mode
             if (cls.tick % 100) == 0:
-                print("Simulation -> Step:" + str(cls.tick) +
+                info("Simulation -> Step:" + str(cls.tick) +
                       " # Driving cars: " + str(current_car_count) + "/" + str(CarRegistry.totalCarCounter) +
-                      " # avgTripOverhead: " + str(CarRegistry.totalTripOverheadAverage))
+                      " # avgTripOverhead: " + str(CarRegistry.totalTripOverheadAverage), Fore.GREEN)
 
             if Config.do_adaptation and (cls.tick % Config.adaptation_period) == 0:
                 perform_adaptation(cls.tick)
