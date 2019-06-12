@@ -35,26 +35,36 @@ def start(processID, parallelMode, useGUI):
 
     # Load the sumo map we are using into Python
     Network.loadNetwork()
-    Districts.loadDistricts()
     info(Fore.GREEN + "# Map loading OK! " + Fore.RESET)
     info(Fore.CYAN + "# Nodes: " + str(Network.nodesCount()) + " / Edges: " + str(Network.edgesCount()) + Fore.RESET)
+    info(Fore.CYAN + "# Passenger Edges: " + str(len(Network.passenger_edges)) + Fore.RESET)
+
+    Districts.loadDistricts()
+    info(Fore.GREEN + "# Districts loading OK! " + Fore.RESET)
+    info(Fore.CYAN + "# Districts: " + str(Districts.number_districts) + Fore.RESET)
+
+    #if district files are created the simulation is not run
+    if (not Config.do_gridding):
+        # After the network is loaded, we init the router
+        CustomRouter.init()
+        # Start sumo in the background
+        SUMOConnector.start()
+
+        info("\n# SUMO-Application started OK!", Fore.GREEN)
+        # Start the simulation
+
+        print "Knowledge.planning_steps: " + str(Knowledge.planning_steps)
+        print "Knowledge.planning_step_horizon: " + str(Knowledge.planning_step_horizon)
+
+        Simulation.start()
+        # Simulation ended, so we shutdown
 
 
+        info(Fore.RED + '# Shutdown' + Fore.RESET)
+        traci.close()
 
-    # After the network is loaded, we init the router
-    CustomRouter.init()
-    # Start sumo in the background
-    SUMOConnector.start()
+    else:
+        info(Fore.RED + '# Shutdown' + Fore.RESET)
 
-    info("\n# SUMO-Application started OK!", Fore.GREEN)
-    # Start the simulation
-
-    print "Knowledge.planning_steps: " + str(Knowledge.planning_steps)
-    print "Knowledge.planning_step_horizon: " + str(Knowledge.planning_step_horizon)
-
-    Simulation.start()
-    # Simulation ended, so we shutdown
-    info(Fore.RED + '# Shutdown' + Fore.RESET)
-    traci.close()
     sys.stdout.flush()
     return None
