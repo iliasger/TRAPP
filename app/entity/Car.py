@@ -51,6 +51,15 @@ class Car:
 
         self.driver_preference = [key for key, value in sorted(history_prefs[self.id].iteritems(), key=lambda (k,v): (v,k))][0]
 
+        # just telling us want a random assignment,
+        # needed for when baseline not done and have more than 600 cars
+
+        # choices = ["balanced", "max_speed", "min_length"]
+        #
+        # self.driver_preference = random.choice(choices)
+
+        #print self.driver_preference # was used to help see what is going on
+
     def setArrived(self, tick):
         """ car arrived at its target, so we add some statistic data """
 
@@ -83,7 +92,8 @@ class Car:
                                                                 tripOverhead)
 
             if Config.log_overheads:
-                CSVLogger.logEvent("overheads", [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
+                #changed to this "(str(Config.adaptation_strategy)" from "overheads" # asks illias
+                CSVLogger.logEvent(str(Config.adaptation_strategy), [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
                                             minimalCosts, tripOverhead, self.id, self.driver_preference])
 
             if Config.log_baseline_result:
@@ -150,6 +160,7 @@ class Car:
         if len(router_res_length.route) > 0:
             self.create_output_files(
                 history_prefs[self.id]["min_length"],
+                #0.1,
                 router_res_length.route,
                 self.find_occupancy_for_route(router_res_length.meta),
                 agent_ind)
@@ -158,6 +169,7 @@ class Car:
         if len(router_res_speeds.route) > 0:
             self.create_output_files(
                 history_prefs[self.id]["max_speed"],
+                #0.1,
                 router_res_speeds.route,
                 self.find_occupancy_for_route(router_res_speeds.meta),
                 agent_ind)
@@ -166,6 +178,7 @@ class Car:
         if len(router_res_length_and_speeds.route) > 0:
             self.create_output_files(
                 history_prefs[self.id]["balanced"],
+                #0.1,
                 router_res_length_and_speeds.route,
                 self.find_occupancy_for_route(router_res_length_and_speeds.meta),
                 agent_ind)
