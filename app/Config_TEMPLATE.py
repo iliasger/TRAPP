@@ -1,6 +1,6 @@
 ######################################
 # HOW TO USE THIS FILE
-# Copy its contents to a file named 'Config.py' under the 'app' folder and fill in the missing paths
+# Copy its contents to a file named ‘Config.py’ under the ‘app’ folder and fill in the missing paths
 ######################################
 
 ######################################
@@ -30,7 +30,7 @@ random_seed = 1
 
 # The path to EPOS jar that is called from Python for planning
 # TODO
-epos_jar_path = "<path to EPOS jar>"
+epos_jar_path = “<path to EPOS jar>”
 
 ######################################
 #### CONFIGURATION OF SIMULATION #####
@@ -38,11 +38,11 @@ epos_jar_path = "<path to EPOS jar>"
 
 # The SUMO config (links to the network) we use for our simulation
 # TODO
-sumoConfig = "<path to SUMO cfg file>"
+sumoConfig = “<path to SUMO cfg file>”
 
 # The SUMO network file we use for our simulation
 # TODO
-sumoNet = "<path to SUMO net.xml file>"
+sumoNet = “<path to SUMO net.xml file>”
 
 # The total number of cars we use in our simulation
 totalCarCounter = 500
@@ -74,8 +74,8 @@ beta = 0
 # unfairness + selfishness <= 1
 # alpha*unfairness + beta*local_cost + (1-alpha-beta)*global_costs
 
-# Suggested values : "XCORR", VAR", "RSS", "RMSE"
-globalCostFunction="VAR"
+# Suggested values : “XCORR”, VAR”, “RSS”, “RMSE”
+globalCostFunction=“VAR”
 
 ######################################
 #### CONFIGURATION OF ADAPTATION #####
@@ -84,5 +84,24 @@ globalCostFunction="VAR"
 # how often adaptation should be triggered
 adaptation_period = 1000
 
-# the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
-adaptation_strategy = "load_balancing"
+# the actual adaptation logic. Possible values: “load_balancing”, “avoid_overloaded_streets”, “tune_planning_resolution”
+adaptation_strategy = “load_balancing”
+
+######################################
+#### CONFIGURATION OF Districts #####
+######################################
+
+#run once with do gridding to load in the grid files and population probabilities, but then make false
+#becasue it is unnecessary to run more than once
+do_gridding = True
+
+#the grid size for the network districts
+districtSize = 1000
+
+#the file containing the zip codes and their population
+# TODO
+zipcodes = “<path to zip code file file>”
+
+#the file to output all district and population information
+# TODO
+populated_districts = “<path to create district file file>”
