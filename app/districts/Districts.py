@@ -40,7 +40,7 @@ class Districts(object):
         process = subprocess.Popen(["python", "/usr/local/Cellar/sumo/1.2.0/share/sumo/tools/district/gridDistricts.py",
                                     '-v',
                                     '-n', (Config.sumoNet),
-                                    '-o', "/Users/gracejennings/TRAPP/app/map/taz_file.taz.xml",
+                                    '-o', Config.taz_file,
                                     '-w', str(Config.districtSize)])
         process.wait()  #need to wait for process so that the taz_file is created before it is opened in createDistrictFile()
         Districts.createDistrictsFile()
@@ -54,7 +54,7 @@ class Districts(object):
         ET.SubElement(districts, 'number_districts')
 
         #accessing the TAZ file of grids of the network that was just created with gridDistricts.py
-        tazTree = ET.parse('app/map/taz_file.taz.xml')
+        tazTree = ET.parse(Config.taz_file)
         root = tazTree.getroot()
 
         if Config.debug:

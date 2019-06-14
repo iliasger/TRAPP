@@ -66,5 +66,8 @@ def start(processID, parallelMode, useGUI):
     else:
         info(Fore.RED + '# Shutdown' + Fore.RESET)
 
+    if (Config.debug):
+        Districts.printDistrictDistribution()
+
     sys.stdout.flush()
     return None

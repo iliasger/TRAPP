@@ -100,8 +100,12 @@ districtSize = 1000
 
 #the file containing the zip codes and their population
 # TODO
-zipcodes = “<path to zip code file file>”
+zipcodes = “<path to zip code file file .csv>”
+
+#the file to output the grids created by sumo
+# TODO
+taz_file = “<path to create district file file .xml>”
 
 #the file to output all district and population information
 # TODO
-populated_districts = “<path to create district file file>”
+populated_districts = “<path to create district file file .xml>”
