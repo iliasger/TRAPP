@@ -6,6 +6,7 @@ import csv
 from app.Util import addToAverage
 from app.logging import CSVLogger
 from app.network.Network import Network
+from app.districts.Districts import Districts
 from app.routing.CustomRouter import CustomRouter
 from app.routing.RouterResult import RouterResult
 from app.adaptation import Knowledge
@@ -88,7 +89,7 @@ class Car:
 
             overheads_file_name = "overheads_" + str(Config.beta) + "-" + str(Config.random_seed)
             if Config.log_overheads:
-                CSVLogger.logEvent(overheads_file_name, [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
+                CSVLogger.logEvent(str(Config.experiment_name), [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
                                             minimalCosts, tripOverhead, self.id, self.driver_preference])
 
             if Config.do_baseline_run:
@@ -103,11 +104,11 @@ class Car:
 
     def __createNewRoute(self, tick):
         """ creates a new route to a random target and uploads this route to SUMO """
-        if self.targetID is None:
-            self.sourceID = Network.get_random_node_id_of_passenger_edge(random)
-        else:
-            self.sourceID = self.targetID  # We start where we stopped
+
+        starting_edge = Districts.get_nonrandom()
+        self.sourceID = starting_edge  # We start where we stopped
         self.targetID = Network.get_random_node_id_of_passenger_edge(random)
+
         self.currentRouteID = self.id + "-" + str(self.rounds)
 
         try:
@@ -117,6 +118,7 @@ class Car:
                 self.currentRouterResult = CustomRouter.route_by_max_speed(self.sourceID, self.targetID)
             else:
                 self.currentRouterResult = CustomRouter.minimalRoute(self.sourceID, self.targetID)
+
 
             if len(self.currentRouterResult.route) > 0:
                 traci.route.add(self.currentRouteID, self.currentRouterResult.route)

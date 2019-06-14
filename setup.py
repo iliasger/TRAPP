@@ -15,6 +15,7 @@ setup(
         'msgpack-python',
         'colorama',
         'Dijkstar',
-        'numpy'
+        'numpy',
+        'pyproj==6.1.0'
     ]
 )

@@ -50,6 +50,7 @@ class Simulation(object):
         Knowledge.planning_steps = Config.planning_steps
         Knowledge.alpha = Config.alpha
         Knowledge.beta = Config.beta
+        Knowledge.resultsFolder = Config.resultsFolder
         Knowledge.globalCostFunction = Config.globalCostFunction
 
     @classmethod
