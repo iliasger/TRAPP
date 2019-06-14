@@ -13,16 +13,19 @@ sumoUseGUI = True
 # True for printing extra info
 debug = False
 
+# if this is set to True:
+# log_overheads, log_utilizations, do_adaptation, do_EPOS_planning, multiple_car_routes should be False
+do_baseline_run = False
+
 log_overheads = True
 
 log_utilizations = True
-
-log_baseline_result = False
 
 do_adaptation = True
 
 do_EPOS_planning = True
 
+# If this is set to False, the simulation when all cars leave the simulation OR when simulation_horizon is reached
 multiple_car_routes = True
 
 # which seed to be used in the random functions, for repeatability
@@ -31,6 +34,9 @@ random_seed = 1
 # The path to EPOS jar that is called from Python for planning
 # TODO
 epos_jar_path = "<path to EPOS jar>"
+
+# memory that EPOS will use, in GB
+EPOS_memory = 4
 
 ######################################
 #### CONFIGURATION OF SIMULATION #####

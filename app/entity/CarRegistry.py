@@ -48,7 +48,8 @@ class CarRegistry(object):
             cls.carIndexCounter += 1
             cls.cars[c.id] = c
             c.addToSimulation(0, True)
-            # print "car-" + str(cls.carIndexCounter)
+            if Config.debug:
+                print "car-" + str(cls.carIndexCounter)
         while len(CarRegistry.cars) > cls.totalCarCounter:
             # to many cars -> remove cars
             (k, v) = CarRegistry.cars.popitem()
@@ -64,6 +65,7 @@ class CarRegistry(object):
 
     @classmethod
     def do_epos_planning(cls, tick):
+
         prepare_epos_input_data_folders()
 
         cars_to_indexes = {}
@@ -88,7 +90,7 @@ class CarRegistry(object):
 
     @classmethod
     def run_epos_apply_results(cls, first_invocation, cars_to_indexes, tick):
-        p = subprocess.Popen(["java", "-jar", Config.epos_jar_path])
+        p = subprocess.Popen(["java",  "-Xmx" + str(Config.EPOS_memory) + "G", "-jar", Config.epos_jar_path])
         print "Invoking EPOS at tick " + str(tick)
         p.communicate()
         print "EPOS run completed!"

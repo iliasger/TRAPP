@@ -49,7 +49,11 @@ class Car:
         # number of ticks since last reroute / arrival
         self.lastRerouteCounter = 0
 
-        self.driver_preference = [key for key, value in sorted(history_prefs[self.id].iteritems(), key=lambda (k,v): (v,k))][0]
+        preferences_options = ["balanced", "max_speed", "min_length"]
+        if Config.do_baseline_run:
+            self.driver_preference = random.choice(preferences_options)
+        else:
+            self.driver_preference = [key for key, value in sorted(history_prefs[self.id].iteritems(), key=lambda (k,v): (v,k))][0]
 
     def setArrived(self, tick):
         """ car arrived at its target, so we add some statistic data """
@@ -82,11 +86,12 @@ class Car:
                                                                 CarRegistry.totalTripOverheadAverage,
                                                                 tripOverhead)
 
+            overheads_file_name = "overheads_" + str(Config.beta) + "-" + str(Config.random_seed)
             if Config.log_overheads:
-                CSVLogger.logEvent("overheads", [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
+                CSVLogger.logEvent(overheads_file_name, [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
                                             minimalCosts, tripOverhead, self.id, self.driver_preference])
 
-            if Config.log_baseline_result:
+            if Config.do_baseline_run:
                 CSVLogger.log_baseline_result("overheads", [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
                                              minimalCosts, tripOverhead, self.id, self.driver_preference])
 
@@ -286,15 +291,7 @@ class Car:
                     raise RuntimeError
                 streets_for_interval[m["edgeID"]] = occupancy
 
-        # self.write_trip_time(trip_time)
-
         return all_streets
-
-    def write_trip_time(self, trip_time):
-        with open('results/trip_times.csv', 'ab') as results_file:
-            results_writer = csv.writer(results_file, dialect='excel')
-            results_writer.writerow([trip_time])
-
 
     def remove(self):
         """" removes this car from the sumo simulation through traci """
