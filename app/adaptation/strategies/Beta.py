@@ -3,15 +3,18 @@ from app.adaptation.Util import *
 from app.adaptation import Knowledge
 from app import Config
 from app.adaptation import Util
-import os,csv
+import os
 
 #this class can be used when running exp_beta.py and exp_alpha.py
 
 class Beta(Strategy):
 
-    # add_overhead_results_folder_if_missing , add the folder for the new
-    # city in the results folder and a global and local folder
-    # within the new results folder
+    # add_overhead_results_folder_if_missing:
+    # Checks to see if 4 folders exist and if not creates them:
+    #   1. City Folder: adds the folder for the new city(name specified by Config.results_folder)
+    #       in the results folder
+    #   2. Alpha or beta folder: add the folder with in the new city folder
+    #   3. Global and (4)Local folder: add the new folders to the alpha or beta folder
     def add_overhead_results_folder_if_missing(self,alpha_or_beta):
         path="results/"+ str(Config.resultsFolder)
         abpath= str(path) + '/'+ str(alpha_or_beta)
@@ -31,12 +34,9 @@ class Beta(Strategy):
         if not os.path.exists(local_path):
             os.makedirs(local_path)
 
-
-
-
-    # get_constants
-    # want to get the last line of the global-const.csv and local-const.csv
-    # of the plans folder just created by epos for that run and return it
+    # get_constants:
+    # Gets the last line of the global-const.csv and local-const.csv
+    # of the plans folder just created by epos for that run and returns the last line
     @staticmethod
     def get_constants(self, global_local):
         # want global_local input to only be "global" or "local"
@@ -46,22 +46,23 @@ class Beta(Strategy):
         lineList= file.readlines()
         file.close()
         last_line = lineList[len(lineList) - 1]
-        # to test print the last line, can be commented out
-        #print "The last line is: "+ last_line
+        # to test uncomment the line below in order to print the last line
+        # print "The last line is: "+ last_line
         return last_line
 
 
-    # new_file_for_const
-    # call get_constants and grab last line of both global-const.csv and local-const.csv
+    # new_file_for_const:
+    # Calls get_constants and grab last line of both global-const.csv and local-const.csv
     # and put in new individual file
     # the file format should be found within resultsFolder created with the specific city name
-    # the file format should be "local_a#_b#_s#_plan#" and "global_a#_b#_s#",
+    # the file format should be "local_a#_b#_s#_plan#" and "global_a#_b#_s#_plan#",
     # a- alpha and the # for that run
     # b- beta and the # for that run
     # s- seed and the # for that run
     # plan# - 10 digit number that is found at output/plan_# and represents
-    # the run of simulation in epos
-    def new_file_for_const(self,alpha_or_beta):
+    # the run of simulation in EPOS
+    def new_file_for_cost(self,alpha_or_beta):
+        #gets output folder path for most recent epos run
         plan_num= Util.get_output_folder_for_latest_EPOS_run()
 
         #get the number correlating with plans so easier to compare
