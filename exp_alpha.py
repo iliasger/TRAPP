@@ -23,7 +23,7 @@ from app.adaptation.strategies import Beta
 if __name__ == "__main__":
 
     Simulation.applySimulationConfigFromFile()
-    Config.adaptation_strategy= "alpha"
+    Config.experiment_name= "alpha"
     #change the name of the results subfolder depending on the cities
     Config.resultsFolder = "NewYorkTest"
 
@@ -51,8 +51,11 @@ if __name__ == "__main__":
 
             #Beta.py can be used for generating alpha values as well
             instance = Beta(alpha)
+            # creating output folders, if not there
             Beta.add_overhead_results_folder_if_missing(instance,"alpha")
+            # running the simulation, CSVlogger will log the overheads to results folders
             Boot.start(0, False, sumoUseGUI)
+            # saving the local and global cost for each run to the results folder
             Beta.new_file_for_const(instance, "alpha")
 
 

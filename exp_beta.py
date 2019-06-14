@@ -21,7 +21,7 @@ from app.adaptation.strategies import Beta
 if __name__ == "__main__":
 
     Simulation.applySimulationConfigFromFile()
-    Config.adaptation_strategy= "beta"
+    Config.experiment_name = "beta"
     resultsFolder_name= "NewYorkTest"
     Config.resultsFolder = resultsFolder_name
 
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     #betas = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
     #for shorter testing  period
-    betas= [0.0, 0.5]
+    betas= [0.0, 0.5, 1.0]
 
     for beta in betas:
         # change seed to 5 eventually when running the real program
@@ -48,12 +48,12 @@ if __name__ == "__main__":
             )
 
             instance = Beta(beta)
+            # creating output folders, if not there
             Beta.add_overhead_results_folder_if_missing(instance, "beta")
+            # running the simulation, CSVlogger will log the overheads to results folders
             Boot.start(0, False, sumoUseGUI)
+            # saving the local and global cost for each run to the results folder
             Beta.new_file_for_const(instance, "beta")
 
-            #trip_overheads= Beta.monitor(instance)
-            #Beta.analyze(instance ,trip_overheads)
-            #Beta.execute(instance,Config.beta)
 
 

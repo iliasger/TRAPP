@@ -87,6 +87,17 @@ adaptation_period = 1000
 # the actual adaptation logic. Possible values: “load_balancing”, “avoid_overloaded_streets”, “tune_planning_resolution”
 adaptation_strategy = “load_balancing”
 
+###############################################
+#### CONFIGURATION for Alpha/Beta Testing #####
+###############################################
+
+# the name of the folder where the alpha/beta testing output
+# files(overheads and global and local cost), suggest naming it the city testing
+resultsFolder= "NewYork"
+
+#which experiment are you planning on running, current options: "alpha" or "beta"
+experiment_name="beta"
+
 ######################################
 #### CONFIGURATION OF Districts #####
 ######################################

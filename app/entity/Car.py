@@ -95,8 +95,8 @@ class Car:
                                                                 tripOverhead)
 
             if Config.log_overheads:
-                #changed to this "(str(Config.adaptation_strategy)" from "overheads" # asks illias
-                CSVLogger.logEvent(str(Config.adaptation_strategy), [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
+                #changed to this "(str(Config.adaptation_strategy)" from "overheads"
+                CSVLogger.logEvent(str(Config.experiment_name), [tick, self.sourceID, self.targetID, self.rounds, durationForTrip,
                                             minimalCosts, tripOverhead, self.id, self.driver_preference])
 
             if Config.log_baseline_result:
