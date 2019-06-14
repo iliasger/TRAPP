@@ -21,6 +21,6 @@ if __name__ == "__main__":
             log_utilizations = False,
             do_adaptation = False,
             do_EPOS_planning = False,
-            multiple_car_routes = False
+            multiple_car_routes = True
         )
         Boot.start(processID, parallelMode, Config.sumoUseGUI)
