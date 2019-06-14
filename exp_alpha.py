@@ -33,7 +33,7 @@ if __name__ == "__main__":
     Simulation.applySimulationConfigFromFile()
     Config.experiment_name= "alpha"
 
-    #TODO
+    # TODO
     # Name of the folder the results will be saved to,
     # Suggestion: naming folder same as the alpha results folder (when running exp_alpha.py)
     # and naming it the city name that you are testing
