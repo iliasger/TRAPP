@@ -102,9 +102,19 @@ class Car:
     def __createNewRoute(self, tick):
         """ creates a new route to a random target and uploads this route to SUMO """
 
-        starting_edge = Districts.get_nonrandom()
-        self.sourceID = starting_edge  # We start where we stopped
-        self.targetID = Network.get_random_node_id_of_passenger_edge(random)
+        #using the districts with population distribution to choose trip starting edges
+        if (Config.use_districts):
+            starting_edge = Districts.get_nonrandom()
+            self.sourceID = starting_edge  # We start where we stopped
+            self.targetID = Network.get_random_node_id_of_passenger_edge(random)
+
+        #using random starting edge and each subsequent source at the respective previous target
+        else:
+            if self.targetID is None:
+                self.sourceID = Network.get_random_node_id_of_passenger_edge(random)
+            else:
+                self.sourceID = self.targetID  # We start where we stopped
+            self.targetID = Network.get_random_node_id_of_passenger_edge(random)
 
         self.currentRouteID = self.id + "-" + str(self.rounds)
 

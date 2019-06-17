@@ -7,6 +7,7 @@ import itertools
 from app import Config
 import os, sys
 
+
 # import of SUMO_HOME
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -22,9 +23,14 @@ class Districts(object):
     district = None
     accumulated_weight = 0
     total_edges = 0
+    taz_path = None
+    district_path = None
 
     @classmethod
     def loadDistricts(cls):
+
+        Districts.taz_path = str('app/map/' + Config.resultsFolder + '/' + Config.resultsFolder + '_taz_file.taz.xml')
+        Districts.district_path = str('app/map/' + Config.resultsFolder + '/' + Config.resultsFolder + '_districts.xml')
 
         if (Config.do_gridding):
             Districts.createTazFile()
@@ -33,14 +39,19 @@ class Districts(object):
 
     @classmethod
     def createTazFile(cls):
+
+        if not os.path.exists(Districts.district_path):
+            os.makedirs(Districts.district_path)
+
         if(Config.debug):
             print('Loading districts from network into new file')
         #creates a TAZ file with all of the districts and their xy values and their contained edges
         #'-v' for verbose mode, '-n' to provide network, '-o' to provide output file for TAZ, '-w' for width(m) of grid
+
         process = subprocess.Popen(["python", "/usr/local/Cellar/sumo/1.2.0/share/sumo/tools/district/gridDistricts.py",
                                     '-v',
                                     '-n', (Config.sumoNet),
-                                    '-o', Config.taz_file,
+                                    '-o', (Districts.taz_path),
                                     '-w', str(Config.districtSize)])
         process.wait()  #need to wait for process so that the taz_file is created before it is opened in createDistrictFile()
         Districts.createDistrictsFile()
@@ -54,12 +65,8 @@ class Districts(object):
         ET.SubElement(districts, 'number_districts')
 
         #accessing the TAZ file of grids of the network that was just created with gridDistricts.py
-        tazTree = ET.parse(Config.taz_file)
+        tazTree = ET.parse(Districts.taz_path)
         root = tazTree.getroot()
-
-        if Config.debug:
-           print('**If it stops here before converting to geo-coordinates and module pyproj is not found,'
-                  'download pyproj with pip install or on git. More info on sumo dlr**')
 
         #capturing populations from csv file so the file only has to be opened and read once and then
         #the container can be iterated through to add populations to districts
@@ -153,9 +160,10 @@ class Districts(object):
         #keeps track of the total values in the xml to use when filling Districts.district without generating new file
         ET.SubElement(districts, 'totals',
                       number_districts=str(Districts.number_districts),
-                      max_weight=str(Districts.accumulated_weight))
+                      max_weight=str(Districts.accumulated_weight),
+                      total_population=str(Districts.totalPopulation))
 
-        tree.write(Config.populated_districts)
+        tree.write(Districts.district_path)
 
 
     @classmethod
@@ -197,12 +205,13 @@ class Districts(object):
         if(Config.debug):
             print('Loading districts from district file')
 
-        populated_districts_file = ET.parse(Config.populated_districts)
+        populated_districts_file = ET.parse(Districts.district_path)
         root = populated_districts_file.getroot()
 
         totals = root.find('totals').attrib
         Districts.number_districts = int(totals['number_districts'])
         Districts.accumulated_weight = float(totals['max_weight'])
+        Districts.totalPopulation = float(totals['total_population'])
 
         #initilaization of container to hold the distrits' information
         Districts.district = [{'id':None,

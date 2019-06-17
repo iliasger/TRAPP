@@ -39,9 +39,10 @@ def start(processID, parallelMode, useGUI):
     info(Fore.CYAN + "# Nodes: " + str(Network.nodesCount()) + " / Edges: " + str(Network.edgesCount()) + Fore.RESET)
     info(Fore.CYAN + "# Passenger Edges: " + str(len(Network.passenger_edges)) + Fore.RESET)
 
-    Districts.loadDistricts()
-    info(Fore.GREEN + "# Districts loading OK! " + Fore.RESET)
-    info(Fore.CYAN + "# Districts: " + str(Districts.number_districts) + Fore.RESET)
+    if (Config.use_districts):
+        Districts.loadDistricts()
+        info(Fore.GREEN + "# Districts loading OK! " + Fore.RESET)
+        info(Fore.CYAN + "# Districts: " + str(Districts.number_districts) + Fore.RESET)
 
     #if district files are created the simulation is not run
     if (not Config.do_gridding):
@@ -66,7 +67,7 @@ def start(processID, parallelMode, useGUI):
     else:
         info(Fore.RED + '# Shutdown' + Fore.RESET)
 
-    if (Config.debug):
+    if (Config.debug and Config.use_districts):
         Districts.printDistrictDistribution()
 
     sys.stdout.flush()

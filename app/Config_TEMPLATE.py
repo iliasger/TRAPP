@@ -30,7 +30,7 @@ random_seed = 1
 
 # The path to EPOS jar that is called from Python for planning
 # TODO
-epos_jar_path = “<path to EPOS jar>”
+epos_jar_path = "<path to EPOS jar>"
 
 ######################################
 #### CONFIGURATION OF SIMULATION #####
@@ -38,11 +38,11 @@ epos_jar_path = “<path to EPOS jar>”
 
 # The SUMO config (links to the network) we use for our simulation
 # TODO
-sumoConfig = “<path to SUMO cfg file>”
+sumoConfig = "<path to SUMO cfg file>"
 
 # The SUMO network file we use for our simulation
 # TODO
-sumoNet = “<path to SUMO net.xml file>”
+sumoNet = "<path to SUMO net.xml file>"
 
 # The total number of cars we use in our simulation
 totalCarCounter = 500
@@ -75,7 +75,7 @@ beta = 0
 # alpha*unfairness + beta*local_cost + (1-alpha-beta)*global_costs
 
 # Suggested values : “XCORR”, VAR”, “RSS”, “RMSE”
-globalCostFunction=“VAR”
+globalCostFunction="VAR"
 
 ######################################
 #### CONFIGURATION OF ADAPTATION #####
@@ -85,27 +85,32 @@ globalCostFunction=“VAR”
 adaptation_period = 1000
 
 # the actual adaptation logic. Possible values: “load_balancing”, “avoid_overloaded_streets”, “tune_planning_resolution”
-adaptation_strategy = “load_balancing”
+adaptation_strategy = "load_balancing"
+
+###############################################
+#### CONFIGURATION for Alpha/Beta Testing #####
+###############################################
+
+# the name of the folder where the alpha/beta testing output
+# files(overheads and global and local cost), suggest naming it the city testing
+resultsFolder= "eichstaedt"
+
+#which experiment are you planning on running, current options: "alpha" or "beta"
+# if this is anything else, it will output a file in 'data' folder
+experiment_name="overheads"
 
 ######################################
 #### CONFIGURATION OF Districts #####
 ######################################
 
-#run once with do gridding to load in the grid files and population probabilities, but then make false
-#becasue it is unnecessary to run more than once
-do_gridding = True
+#to use districts to select trip origins
+use_districts = True
+
+#run once with do_gridding to load in the district files and population probabilities, does not run a simulation
+do_gridding = False
 
 #the grid size for the network districts
 districtSize = 1000
 
 #the file containing the zip codes and their population
-# TODO
-zipcodes = “<path to zip code file file .csv>”
-
-#the file to output the grids created by sumo
-# TODO
-taz_file = “<path to create district file file .xml>”
-
-#the file to output all district and population information
-# TODO
-populated_districts = “<path to create district file file .xml>”
+zipcodes = 'app/map/eichstaedt_zips.csv'
