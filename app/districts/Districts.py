@@ -29,8 +29,8 @@ class Districts(object):
     @classmethod
     def loadDistricts(cls):
 
-        Districts.taz_path = str('app/map/' + Config.resultsFolder + '/' + Config.resultsFolder + '_taz_file.taz.xml')
-        Districts.district_path = str('app/map/' + Config.resultsFolder + '/' + Config.resultsFolder + '_districts.xml')
+        Districts.taz_path = str('app/map/' + Config.city_name + 'Districts/' + Config.city_name + '_taz_file.taz.xml')
+        Districts.district_path = str('app/map/' + Config.city_name + 'Districts/' + Config.city_name + '_districts.xml')
 
         if (Config.do_gridding):
             Districts.createTazFile()
@@ -40,8 +40,8 @@ class Districts(object):
     @classmethod
     def createTazFile(cls):
 
-        if not os.path.exists(Districts.district_path):
-            os.makedirs(Districts.district_path)
+        if not os.path.exists(str('app/map/' + Config.city_name + 'Districts/')):
+            os.makedirs(str('app/map/' + Config.city_name + 'Districts/'))
 
         if(Config.debug):
             print('Loading districts from network into new file')

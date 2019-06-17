@@ -114,3 +114,6 @@ districtSize = 1000
 
 #the file containing the zip codes and their population
 zipcodes = 'app/map/eichstaedt_zips.csv'
+
+#city name, to store districts and TAZ in a folder under app/map, needs to be kept consistent for each city
+city_name = 'city_name'
