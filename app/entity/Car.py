@@ -91,15 +91,35 @@ class Car:
             self.rounds += 1
             self.addToSimulation(tick, False)
 
+    def __getKnownSourceTargetNodeID(self):
+        knownSources = [
+            Network.getEdgeIDsToNode('2814#4').getID(),
+            Network.getEdgeIDsToNode('2814#3').getID(),
+            Network.getEdgeIDsToNode('-2781#2').getID(),
+            Network.getEdgeIDsToNode('-2833').getID(),
+            Network.getEdgeIDsToNode('-2980#1').getID(),
+        ]
+        knownTargets = [
+            Network.getEdgeIDsToNode('-gneE37').getID(),
+            Network.getEdgeIDsToNode('-2706#0').getID(),
+            Network.getEdgeIDsToNode('-2737#2').getID(),
+            Network.getEdgeIDsToNode('-2883').getID()
+        ]
+        return random.choice(knownSources), random.choice(knownTargets)
+
     def __createNewRoute(self, tick):
+        sourceNodeId, targetNodeId = self.__getKnownSourceTargetNodeID()
         """ creates a new route to a random target and uploads this route to SUMO """
         # import here because python can not handle circular-dependencies
         if self.targetID is None:
-            self.sourceID = random.choice(Network.nodes).getID()
+            # self.sourceID = random.choice(Network.nodes).getID()
+            self.sourceID = sourceNodeId
         else:
-            self.sourceID = self.targetID  # We start where we stopped
+            #self.sourceID = self.targetID  # We start where we stopped
+            self.sourceID = sourceNodeId
         # random target
-        self.targetID = random.choice(Network.nodes).getID()
+        #self.targetID = random.choice(Network.nodes).getID()
+        self.targetID = targetNodeId
         self.currentRouteID = self.id + "-" + str(self.rounds)
         # self.currentRouterResult = CustomRouter.route(self.sourceID, self.targetID, tick, self)
 

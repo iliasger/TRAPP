@@ -29,6 +29,9 @@ class Simulation(object):
     # last tick time
     lastTick = current_milli_time()
 
+    lane1speed = 0
+    lane2speed = 0
+
     @classmethod
     def applyFileConfig(cls):
         """ reads configs from a json and applies it at realtime to the simulation """
@@ -59,6 +62,9 @@ class Simulation(object):
         CSVLogger.logEvent("streets", [edge.id for edge in Network.routingEdges])
 
         prepare_epos_input_data_folders()
+
+        cls.lane1speed = traci.lane.getMaxSpeed("-2788#0_0")
+        cls.lane2speed = traci.lane.getMaxSpeed("-2788#0_1")
 
         """ start the simulation """
         info("# Start adding initial cars to the simulation", Fore.MAGENTA)
@@ -116,6 +122,13 @@ class Simulation(object):
             if Config.simulation_horizon == cls.tick:
                 print("Simulation horizon reached!")
                 return
+
+            if cls.tick == 600:
+                traci.lane.setMaxSpeed("-2788#0_0", 0.1)
+                traci.lane.setMaxSpeed("-2788#0_1", 0.1)
+            if cls.tick == 1201:
+                traci.lane.setMaxSpeed("-2788#0_0", cls.lane1speed)
+                traci.lane.setMaxSpeed("-2788#0_1", cls.lane2speed)
 
             if (cls.tick % Config.adaptation_period) == 0:
                 perform_adaptation(cls.tick)

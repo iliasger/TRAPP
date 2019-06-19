@@ -39,6 +39,8 @@ class Network(object):
         cls.nodes = net.getNodes()
         cls.edges = net.getEdges()
         cls.routingEdges = map(lambda x: RoutingEdge(x), net.getEdges())
+        cls.getNeighboringLanes = net.getNeighboringLanes
+        cls.getNeighboringEdges = net.getNeighboringEdges
 
     @classmethod
     def nodesCount(cls):
@@ -66,3 +68,9 @@ class Network(object):
     @classmethod
     def getPositionOfEdge(cls, edge):
         return edge.getFromNode().getCoord()  # @todo average two
+
+    # get edge from x and y cordinates of the map
+    @classmethod
+    def getEdgeFromPosition(cls, x, y, r):
+        #return cls.getNeighboringLanes(x, y, r)
+        return cls.getNeighboringEdges(x, y, r)

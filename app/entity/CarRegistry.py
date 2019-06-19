@@ -66,6 +66,7 @@ class CarRegistry(object):
         cars_to_indexes = {}
         i = 0
         for car_id, car in CarRegistry.cars.iteritems():
+            # creating agent plans and routes in datasets folder
             if car.create_epos_output_files_based_on_current_location(tick, str(i)):
                 cars_to_indexes[car_id] = i
                 i += 1
@@ -97,7 +98,7 @@ class CarRegistry(object):
         with open(output_folder_for_latest_run + '/selected-plans.csv', 'r') as results:
             line_id = 1
             for line in results:
-                if line_id == 41:
+                if line_id == 41:       #todo: why 41?  bcz of 41 epos iterations
                     res = [int(x) for x in line.split(",")[2:]]
                     break
                 line_id += 1

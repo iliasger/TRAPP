@@ -1,3 +1,5 @@
+# Baseline 1 is for no collision occour at 600th tick to 1200 ticks out of total 2000 ticks
+
 import json
 import traci
 import traci.constants as tc
@@ -45,14 +47,8 @@ class Simulation(object):
 
     @classmethod
     def start(cls):
-
-        Knowledge.planning_period = Config.planning_period
-        Knowledge.planning_step_horizon = Config.planning_step_horizon
-        Knowledge.planning_steps = Config.planning_steps
-        Knowledge.alpha = Config.alpha
-        Knowledge.beta = Config.beta
-        Knowledge.globalCostFunction = Config.globalCostFunction
-
+ 
+        print ("RUNNING SIMULATION: BASELINE 1")
         remove_overhead_and_streets_files()
         add_data_folder_if_missing()
 
@@ -60,24 +56,40 @@ class Simulation(object):
 
         prepare_epos_input_data_folders()
 
+        #---------------------------------------
+        # get edges and set speed to 0.1
+        # Changing the lane and edge speed did not work
+        # nearedges = Network.getEdgeFromPosition(2314.92, 1161.52, 4)
+        # edge1 = nearedges[0][0]
+        # edge2 = nearedges[1][0]
+        # edge1._speed = 0.1
+        # edge2._speed = 0.1
+        # lanes1 = edge1.getLanes()
+        # lanes2 = edge2.getLanes()
+        # for lane in lanes1:
+        #     lane._speed = 0.1
+        # for lane in lanes2:
+        #     lane._speed = 0.1
+        #---------------------------------------
+        # blockedge = Network.getEdgeByID("-2788#0")
+        # blocklanes = blockedge.getLanes()
+        # blocklane1 = blocklanes[0]
+        # blocklane2 = blocklanes[1]
+        # blockedge._speed = 0.1
+        # blocklane1.setParam("maxspeed", 0.1)
+        # blocklane2.setParam("shoaib", 0.1)
+        #-----------------------------------------
+        # this works
+        traci.lane.setMaxSpeed("-2788#0_0", 0.1)
+        traci.lane.setMaxSpeed("-2788#0_1", 0.1)
+
+        
+
         """ start the simulation """
         info("# Start adding initial cars to the simulation", Fore.MAGENTA)
         # apply the configuration from the json file
         cls.applyFileConfig()
         CarRegistry.applyCarCounter()
-
-        if Config.start_with_epos_optimization:
-            Knowledge.time_of_last_EPOS_invocation = 0
-            CarRegistry.change_EPOS_config("conf/epos.properties", "numAgents=", "numAgents=" + str(Config.totalCarCounter))
-            CarRegistry.change_EPOS_config("conf/epos.properties", "planDim=", "planDim=" + str(Network.edgesCount() * Knowledge.planning_steps))
-            CarRegistry.change_EPOS_config("conf/epos.properties", "alpha=", "alpha=" + str(Knowledge.alpha))
-            CarRegistry.change_EPOS_config("conf/epos.properties", "beta=", "beta=" + str(Knowledge.beta))
-            CarRegistry.change_EPOS_config("conf/epos.properties", "globalCostFunction=", "globalCostFunction=" + str(Knowledge.globalCostFunction))
-
-            cars_to_indexes = {}
-            for i in range(Config.totalCarCounter):
-                cars_to_indexes["car-" + str(i)] = i
-            CarRegistry.run_epos_apply_results(True, cars_to_indexes, 0)
 
         cls.loop()
 
@@ -98,7 +110,7 @@ class Simulation(object):
             cls.tick += 1
             traci.simulationStep()
 
-            # Check for removed cars and re-add them into the system
+            # Check for removed cars and re-add them into the system        122 is the VAR_ARRIVED_VEHICLES_IDS in traci constants
             for removedCarId in traci.simulation.getSubscriptionResults()[122]:
                 if Config.debug:
                     print str(removedCarId) + "\treached its destination at tick " + str(cls.tick)
@@ -117,8 +129,11 @@ class Simulation(object):
                 print("Simulation horizon reached!")
                 return
 
-            if (cls.tick % Config.adaptation_period) == 0:
-                perform_adaptation(cls.tick)
+            # if (cls.tick % Config.adaptation_period) == 0:
+            #     perform_adaptation(cls.tick)
 
-            if (cls.tick % Knowledge.planning_period) == 0:
-                CarRegistry.do_epos_planning(cls.tick)
+            # if (cls.tick % Knowledge.planning_period) == 0:
+            #     CarRegistry.do_epos_planning(cls.tick)
+
+            if (cls.tick % 100) == 0:
+                nearedges2 = Network.getEdgeFromPosition(2314.92, 1161.52, 4)

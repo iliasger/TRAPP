@@ -10,7 +10,7 @@ debug = False  # False
 # which seed to be used in the random functions, for repeatability
 random_seed = 1
 
-epos_jar_path = "/Users/gerostat/Documents/research/EPOS CROWDNAV/release-0.0.1/epos-tutorial.jar"
+epos_jar_path = "C:\\Users\\Shoaib\\Documents\\Lectures\\Thesis\\docs\\release-0.0.1\\epos-tutorial.jar"
 
 ######################################
 #### CONFIGURATION OF SIMULATION #####
@@ -26,7 +26,8 @@ sumoNet = "./app/map/eichstaedt.net.xml"
 totalCarCounter = 600
 
 # How long the simulation will run
-simulation_horizon = 300
+# simulation_horizon = 300
+simulation_horizon = 2000
 
 ######################################
 ##### CONFIGURATION OF PLANNING ######
@@ -36,10 +37,12 @@ simulation_horizon = 300
 start_with_epos_optimization = False
 
 # How frequently EPOS planning will be invoked (runtime-configurable parameter)
-planning_period = 100
+#planning_period = 100
+planning_period = 600
 
 # the number of steps to look in the future while planning
-planning_steps = 2
+# planning_steps = 3
+planning_steps = 1
 
 # how long a planning step should be
 planning_step_horizon = 50
@@ -60,7 +63,9 @@ globalCostFunction="VAR"
 ######################################
 
 # how often adaptation should be triggered
-adaptation_period = 100
+# adaptation_period = 100
+adaptation_period = 600
 
 # the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
-adaptation_strategy = "load_balancing"
+#adaptation_strategy = "load_balancing"
+adaptation_strategy = "avoid_overloaded_streets"
