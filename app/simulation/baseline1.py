@@ -4,6 +4,7 @@ import json
 import traci
 import traci.constants as tc
 from app.network.Network import Network
+from app.catastrophe.Accident import Accident
 
 from colorama import Fore
 
@@ -80,10 +81,13 @@ class Simulation(object):
         # blocklane2.setParam("shoaib", 0.1)
         #-----------------------------------------
         # this works
-        traci.lane.setMaxSpeed("-2788#0_0", 0.1)
-        traci.lane.setMaxSpeed("-2788#0_1", 0.1)
+        #traci.lane.setMaxSpeed("-2788#0_0", 0.1)
+        #traci.lane.setMaxSpeed("-2788#0_1", 0.1)
 
-        
+        #traci.lane.setParameter("-2788#0_0", "allowed vehicle class", "authority")
+
+        Accident.blockLane("-2788#0_0")
+        Accident.blockLane("-2788#0_1")
 
         """ start the simulation """
         info("# Start adding initial cars to the simulation", Fore.MAGENTA)
@@ -137,3 +141,5 @@ class Simulation(object):
 
             if (cls.tick % 100) == 0:
                 nearedges2 = Network.getEdgeFromPosition(2314.92, 1161.52, 4)
+                Accident.openlane('-2788#0_0')
+                Accident.openlane('-2788#0_1')
