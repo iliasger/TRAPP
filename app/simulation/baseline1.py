@@ -4,7 +4,8 @@ import json
 import traci
 import traci.constants as tc
 from app.network.Network import Network
-from app.catastrophe.Accident import Accident
+#from app.catastrophe.Accident import Accident
+from app.catastrophe.Accident import getAccidentInstance
 
 from colorama import Fore
 
@@ -31,7 +32,6 @@ class Simulation(object):
 
     # last tick time
     lastTick = current_milli_time()
-    accident = Accident()
 
     @classmethod
     def applyFileConfig(cls):
@@ -88,11 +88,12 @@ class Simulation(object):
         #traci.lane.setParameter("-2788#0_0", "allowed vehicle class", "authority")
 
         #Accident.subscribeToAccident(Accident())
+        accident = getAccidentInstance()
         x = lambda a : a
-        cls.accident.subscribe(cls.printAccident)
-        cls.accident.blockLane("-2788#0_0")
-        cls.accident.blockLane("-2788#0_1")
-        cls.accident.fire(blocked="true")
+        accident.subscribe(cls.printAccident)
+        accident.blockLane("-2788#0_0")
+        accident.blockLane("-2788#0_1")
+        accident.fire(blocked="true")
         #Accident.blockLane("-2788#0_0")
         #Accident.blockLane("-2788#0_1")
 
@@ -155,7 +156,8 @@ class Simulation(object):
                 nearedges2 = Network.getEdgeFromPosition(2314.92, 1161.52, 4)
                 #Accident.openlane('-2788#0_0')
                 #Accident.openlane('-2788#0_1')
-                cls.accident.openlane('-2788#0_0')
-                cls.accident.openlane('-2788#0_1')
-                cls.accident.fire(blocked='closed')
+                accident = getAccidentInstance()
+                accident.openlane('-2788#0_0')
+                accident.openlane('-2788#0_1')
+                accident.fire(blocked='closed')
                 

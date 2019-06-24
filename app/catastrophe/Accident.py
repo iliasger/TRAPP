@@ -2,6 +2,14 @@ import traci
 import traci.constants as tc
 import Observable as Observable
 
+_accidentInstance = None
+def getAccidentInstance():
+    global _accidentInstance
+    if _accidentInstance is None:
+        _accidentInstance = Accident()
+    return _accidentInstance
+
+
 class Accident(Observable.Observable):
     def __init__(self):
         super(Accident, self).__init__()
