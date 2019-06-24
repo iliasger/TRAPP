@@ -80,7 +80,7 @@ beta = 0
 # unfairness + selfishness <= 1
 # alpha*unfairness + beta*local_cost + (1-alpha-beta)*global_costs
 
-# Suggested values : “XCORR”, VAR”, “RSS”, “RMSE”
+# Suggested values : XCORR, VAR, RSS, RMSE
 globalCostFunction="VAR"
 
 ######################################
@@ -90,7 +90,7 @@ globalCostFunction="VAR"
 # how often adaptation should be triggered
 adaptation_period = 1000
 
-# the actual adaptation logic. Possible values: “load_balancing”, “avoid_overloaded_streets”, “tune_planning_resolution”
+# the actual adaptation logic. Possible values: load_balancing, avoid_overloaded_streets, tune_planning_resolution
 adaptation_strategy = "load_balancing"
 
 ###############################################
@@ -99,22 +99,10 @@ adaptation_strategy = "load_balancing"
 
 # the name of the folder where the alpha/beta testing output
 # files(overheads and global and local cost), suggest naming it the city testing
-resultsFolder= "eichstaedt"
+resultsFolder= "CityName"
 
-#which experiment are you planning on running, current options: "alpha" or "beta"
-# if this is anything else, it will output a file in 'data' folder
-experiment_name="overheads"
-
-###############################################
-#### CONFIGURATION for Alpha/Beta Testing #####
-###############################################
-
-# the name of the folder where the alpha/beta testing output
-# files(overheads and global and local cost), suggest naming it the city testing
-resultsFolder= "NewYork"
-
-#which experiment are you planning on running, current options: "alpha" or "beta"
-# if this is anything else, it will output a file in 'data' folder
+#which experiment are you planning on running, current options: alpha or beta
+# if this is anything else, it will output a file in data folder
 experiment_name="overheads"
 
 ######################################
