@@ -31,6 +31,7 @@ class Simulation(object):
 
     # last tick time
     lastTick = current_milli_time()
+    accident = Accident()
 
     @classmethod
     def applyFileConfig(cls):
@@ -86,8 +87,14 @@ class Simulation(object):
 
         #traci.lane.setParameter("-2788#0_0", "allowed vehicle class", "authority")
 
-        Accident.blockLane("-2788#0_0")
-        Accident.blockLane("-2788#0_1")
+        #Accident.subscribeToAccident(Accident())
+        x = lambda a : a
+        cls.accident.subscribe(cls.printAccident)
+        cls.accident.blockLane("-2788#0_0")
+        cls.accident.blockLane("-2788#0_1")
+        cls.accident.fire(blocked="true")
+        #Accident.blockLane("-2788#0_0")
+        #Accident.blockLane("-2788#0_1")
 
         """ start the simulation """
         info("# Start adding initial cars to the simulation", Fore.MAGENTA)
@@ -96,6 +103,11 @@ class Simulation(object):
         CarRegistry.applyCarCounter()
 
         cls.loop()
+
+    @classmethod
+    def printAccident(cls, event):
+        print(event)
+        print(event.blocked)
 
     @classmethod
     # @profile
@@ -141,5 +153,9 @@ class Simulation(object):
 
             if (cls.tick % 100) == 0:
                 nearedges2 = Network.getEdgeFromPosition(2314.92, 1161.52, 4)
-                Accident.openlane('-2788#0_0')
-                Accident.openlane('-2788#0_1')
+                #Accident.openlane('-2788#0_0')
+                #Accident.openlane('-2788#0_1')
+                cls.accident.openlane('-2788#0_0')
+                cls.accident.openlane('-2788#0_1')
+                cls.accident.fire(blocked='closed')
+                

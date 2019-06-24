@@ -1,7 +1,10 @@
 import traci
 import traci.constants as tc
+import Observable as Observable
 
-class Accident(object):
+class Accident(Observable.Observable):
+    def __init__(self):
+        super(Accident, self).__init__()
 
     __allowedWhenBlocked = ['authority']
     __DisallowedWhenBlocked = ['private','emergency','army','vip','passenger','hov','taxi','bus','coach','delivery','truck','trailer','tram','rail_urban','rail','rail_electric','motorcycle','moped','bicycle','pedestrian','evehicle','ship','custom1','custom2']
@@ -9,31 +12,36 @@ class Accident(object):
     _roadBlocked = False
     _blockedLanes = list()
     
-    @classmethod
-    def getBlockedLanes(cls):
-        return cls._blockedLanes
+    def getBlockedLanes(self):
+        return self._blockedLanes
 
-    @classmethod
-    def getAccidentStatus(cls):
-        return cls.roadBlocked
+    def getAccidentStatus(self):
+        return self._roadBlocked
 
-    @classmethod
-    def blockLane(cls, lane):
+    def blockLane(self, lane):
         try:
-            cls._blockedLanes.index(lane)
+            self._blockedLanes.index(lane)
         except:
-            cls._blockedLanes.append(lane)
-            traci.lane.setAllowed(lane, cls.__allowedWhenBlocked)
-            traci.lane.setDisallowed(lane, cls.__DisallowedWhenBlocked)
+            self._blockedLanes.append(lane)
+            traci.lane.setAllowed(lane, self.__allowedWhenBlocked)
+            traci.lane.setDisallowed(lane, self.__DisallowedWhenBlocked)
+            #self.fire(Accident, type="Accident")
         else:
             print("Lane already blocked")
 
-    @classmethod
-    def openlane(cls, lane):
+    def openlane(self, lane):
         try:
-            cls._blockedLanes.remove(lane)
+            self._blockedLanes.remove(lane)
         except:
             print("Lane already open")
         else:
             traci.lane.setAllowed(lane, [])
             traci.lane.setDisallowed(lane, [])
+            #self.fire("XXX-Cleared-XXX")
+
+    def setLaneMaxSpeed(self, lane, speed):
+        traci.lane.setMaxSpeed(lane, speed)
+
+    #@classmethod
+    #def subscribeToAccident(self, callback): 
+    #    self.subscribe(callback)
