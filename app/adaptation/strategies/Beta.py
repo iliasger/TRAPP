@@ -65,8 +65,9 @@ class Beta(Strategy):
         #gets output folder path for most recent epos run
         plan_num= Util.get_output_folder_for_latest_EPOS_run()
 
-        #get the number correlating with plans so easier to compare
-        num_only= plan_num[len(plan_num)-10:len(plan_num)]
+        # get the number correlating with plans so easier to compare, only want number for testing if correct
+        # makes harder to grab data for graphs
+        #num_only= plan_num[len(plan_num)-10:len(plan_num)]
 
         #the new file for the global cost and local cost last line
         globalcost = Beta.get_constants(self, 'global')
@@ -75,16 +76,21 @@ class Beta(Strategy):
         path= './results/' + str(Config.resultsFolder) + '/'+ str(alpha_or_beta)
 
         #creating local cost file for that run/plan
+        # if want to see number of plans add str(num_only) to the string of name
         with open(path + '/local/' + 'local_a' + str(Knowledge.alpha) +
-                  '_b' + str(Knowledge.beta) + '_s' + str(Config.random_seed) + '_' + str(num_only) +
-                  '.csv', 'w') as mycsvfile:
-           mycsvfile.write(localcost)
+                  '_b' + str(Knowledge.beta) + '_s' + str(Config.random_seed) + 
+                  '.csv', 'w') as mycsvfilelocal:
+            mycsvfilelocal.write(localcost)
+            mycsvfilelocal.close()
 
         #creating the global cost file for that run/plan
+        # if want to see number of plans add str(num_only) to the string of name
         with open(path +'/global/' + 'global_a' + str(Knowledge.alpha) +
-                  '_b' + str(Knowledge.beta) + '_s' + str(Config.random_seed) + '_' + str(num_only) +
-                  '.csv', 'w') as mycsvfile:
-            mycsvfile.write(globalcost)
+                  '_b' + str(Knowledge.beta) + '_s' + str(Config.random_seed) +
+                  '.csv', 'w') as mycsvfileglobal:
+            mycsvfileglobal.write(globalcost)
+            mycsvfileglobal.close()
+
 
 
 

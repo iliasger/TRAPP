@@ -40,6 +40,9 @@ if __name__ == "__main__":
     # betas testing ( should run simulation 11 times)
     betas = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
+    #betas testing
+    #betas = [0, 1.0]
+
     for beta in betas:
         # see of 5 for testing
         for random_seed in range(5):
@@ -51,10 +54,25 @@ if __name__ == "__main__":
             print "########################"
             print "########################"
 
+            # Starting the application
+            Simulation.applySimulationConfigFromFile()
+
             Simulation.customizeSimulationConfig(
-                random_seed = random_seed,
-                beta = beta,
+                random_seed=random_seed,
+                beta=beta,
+                log_baseline_result=False,
+                log_overheads=True,
+                log_utilizations=False,
+                do_adaptation=False,
+                do_EPOS_planning=True,
+                multiple_car_routes=True,
+                start_with_epos_optimization=True,
+                simulation_horizon=1800,
+                planning_period=100000,
+                planning_step_horizon=1800,
+
             )
+
 
             instance = Beta(beta)
             # creating output folders, if not there

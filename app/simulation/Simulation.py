@@ -58,7 +58,7 @@ class Simulation(object):
                                   planning_period=None, planning_step_horizon=None, planning_steps=None,
                                   alpha=None, beta=None, globalCostFunction=None, log_baseline_result=None,
                                   log_overheads=None, log_utilizations=None, do_adaptation=None,
-                                  do_EPOS_planning=None, multiple_car_routes=None
+                                  do_EPOS_planning=None, multiple_car_routes=None, start_with_epos_optimization=True
                                   ):
         if random_seed is not None:
             Config.random_seed = random_seed
@@ -91,6 +91,9 @@ class Simulation(object):
             Config.do_EPOS_planning = do_EPOS_planning
         if multiple_car_routes is not None:
             Config.multiple_car_routes = multiple_car_routes
+        if start_with_epos_optimization is not None:
+            Config.start_with_epos_optimization = start_with_epos_optimization
+
 
     @classmethod
     def start(cls):
