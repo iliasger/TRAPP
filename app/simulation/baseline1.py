@@ -93,7 +93,6 @@ class Simulation(object):
         accident.subscribe(cls.printAccident)
         accident.blockLane("-2788#0_0")
         accident.blockLane("-2788#0_1")
-        accident.fire(blocked="true")
         #Accident.blockLane("-2788#0_0")
         #Accident.blockLane("-2788#0_1")
 
@@ -159,5 +158,4 @@ class Simulation(object):
                 accident = getAccidentInstance()
                 accident.openlane('-2788#0_0')
                 accident.openlane('-2788#0_1')
-                accident.fire(blocked='closed')
                 
