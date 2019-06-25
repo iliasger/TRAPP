@@ -75,4 +75,6 @@ adaptation_strategy = "avoid_overloaded_streets"
 ##### CONFIGURATION OF ACCIDENT ######
 ######################################
 
-restrictTrafficFlow = True         # if true then traffic will flow from source to target nodes as defined below
+restrictTrafficFlow = True          # if true then traffic will flow from source to target nodes as defined below
+trafficSource = (4025, 532, 80)     # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
+trafficTarget = (568, 2659, 80)     # Target of the traffic. Tuple: (x-position, y-position, radius) on the map

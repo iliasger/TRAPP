@@ -43,8 +43,11 @@ class Network(object):
         cls.getNeighboringLanes = net.getNeighboringLanes
         cls.getNeighboringEdges = net.getNeighboringEdges
         # Below two arrays are used to hold node ids which are used for traffic flow from source to target ids
-        cls.sourceNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(4025, 532, 80))
-        cls.targetNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(568, 2659, 80))
+        if Config.restrictTrafficFlow == True:
+            s = Config.trafficSource
+            t = Config.trafficTarget
+            cls.sourceNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(s[0], s[1], s[2]))
+            cls.targetNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(t[0], t[1], t[2]))
 
     @classmethod
     def nodesCount(cls):
