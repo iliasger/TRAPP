@@ -69,3 +69,10 @@ adaptation_period = 600
 # the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
 #adaptation_strategy = "load_balancing"
 adaptation_strategy = "avoid_overloaded_streets"
+
+
+######################################
+##### CONFIGURATION OF ACCIDENT ######
+######################################
+
+restrictTrafficFlow = True         # if true then traffic will flow from source to target nodes as defined below

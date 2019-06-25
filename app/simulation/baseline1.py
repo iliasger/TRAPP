@@ -89,12 +89,9 @@ class Simulation(object):
 
         #Accident.subscribeToAccident(Accident())
         accident = getAccidentInstance()
-        x = lambda a : a
         accident.subscribe(cls.printAccident)
-        accident.blockLane("-2788#0_0")
-        accident.blockLane("-2788#0_1")
-        #Accident.blockLane("-2788#0_0")
-        #Accident.blockLane("-2788#0_1")
+        #accident.blockLane("-2788#0_0")
+        #accident.blockLane("-2788#0_1")
 
         """ start the simulation """
         info("# Start adding initial cars to the simulation", Fore.MAGENTA)
@@ -152,7 +149,6 @@ class Simulation(object):
             #     CarRegistry.do_epos_planning(cls.tick)
 
             if (cls.tick % 100) == 0:
-                nearedges2 = Network.getEdgeFromPosition(2314.92, 1161.52, 4)
                 #Accident.openlane('-2788#0_0')
                 #Accident.openlane('-2788#0_1')
                 accident = getAccidentInstance()

@@ -98,7 +98,7 @@ class Simulation(object):
             cls.tick += 1
             traci.simulationStep()
 
-            # Check for removed cars and re-add them into the system
+            # Check for removed cars and re-add them into the system. 122 is the VAR_ARRIVED_VEHICLES_IDS in traci constants
             for removedCarId in traci.simulation.getSubscriptionResults()[122]:
                 if Config.debug:
                     print str(removedCarId) + "\treached its destination at tick " + str(cls.tick)

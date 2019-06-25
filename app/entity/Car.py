@@ -91,35 +91,52 @@ class Car:
             self.rounds += 1
             self.addToSimulation(tick, False)
 
-    def __getKnownSourceTargetNodeID(self):
-        knownSources = [
-            Network.getEdgeIDsToNode('2814#4').getID(),
-            Network.getEdgeIDsToNode('2814#3').getID(),
-            Network.getEdgeIDsToNode('-2781#2').getID(),
-            Network.getEdgeIDsToNode('-2833').getID(),
-            Network.getEdgeIDsToNode('-2980#1').getID(),
-        ]
-        knownTargets = [
-            Network.getEdgeIDsToNode('-gneE37').getID(),
-            Network.getEdgeIDsToNode('-2706#0').getID(),
-            Network.getEdgeIDsToNode('-2737#2').getID(),
-            Network.getEdgeIDsToNode('-2883').getID()
-        ]
-        return random.choice(knownSources), random.choice(knownTargets)
 
+    # this method was created to generate source and target of the cars 
+    # that will be from the pool or nodes at one side of the map to the
+    # other side of the map.
+    # i.e can be used to make the flow of traffic from one area to the other area in the map
+    #def __getKnownSourceTargetNodeID(self):
+        # sourceEdges = Network.getEdgeFromPosition(4025, 532, 80)
+        # sourcenodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), sourceEdges)
+        # targetEdges = Network.getEdgeFromPosition(568, 2659, 80)
+        # targetnodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), targetEdges)
+        # knownSources = [
+        #     Network.getEdgeIDsToNode('2814#4').getID(),
+        #     Network.getEdgeIDsToNode('2814#3').getID(),
+        #     Network.getEdgeIDsToNode('-2781#2').getID(),
+        #     Network.getEdgeIDsToNode('-2833').getID(),
+        #     Network.getEdgeIDsToNode('-2980#1').getID(),
+        # ]
+        # knownTargets = [
+        #     Network.getEdgeIDsToNode('-gneE37').getID(),
+        #     Network.getEdgeIDsToNode('-2706#0').getID(),
+        #     Network.getEdgeIDsToNode('-2737#2').getID(),
+        #     Network.getEdgeIDsToNode('-2883').getID()
+        # ]
+        #return random.choice(self.sourceNodeIds), random.choice(self.targetNodeIds)
+
+    """creates new route and upload this route to SUMO"""
     def __createNewRoute(self, tick):
-        sourceNodeId, targetNodeId = self.__getKnownSourceTargetNodeID()
-        """ creates a new route to a random target and uploads this route to SUMO """
-        # import here because python can not handle circular-dependencies
-        if self.targetID is None:
-            # self.sourceID = random.choice(Network.nodes).getID()
-            self.sourceID = sourceNodeId
+        if Config.restrictTrafficFlow == False:
+            """ creates a new route to a random target and uploads this route to SUMO """
+            # import here because python can not handle circular-dependencies
+            if self.targetID is None:
+                self.sourceID = random.choice(Network.nodes).getID()
+            else:
+                self.sourceID = self.targetID  # We start where we stopped
+            # random target
+            self.targetID = random.choice(Network.nodes).getID()
+            #self.targetID = targetNodeId
         else:
-            #self.sourceID = self.targetID  # We start where we stopped
-            self.sourceID = sourceNodeId
-        # random target
-        #self.targetID = random.choice(Network.nodes).getID()
-        self.targetID = targetNodeId
+            sourceNodeId, targetNodeId = Network.getDefinedSourceTargetNodeIds()
+            if self.targetID is None:
+                self.sourceID = sourceNodeId
+            else:
+                self.sourceID = sourceNodeId
+            # set target
+            self.targetID = targetNodeId
+
         self.currentRouteID = self.id + "-" + str(self.rounds)
         # self.currentRouterResult = CustomRouter.route(self.sourceID, self.targetID, tick, self)
 

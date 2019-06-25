@@ -1,4 +1,5 @@
 import sumolib
+import random
 
 from app import Config
 from app.routing.RoutingEdge import RoutingEdge
@@ -41,6 +42,9 @@ class Network(object):
         cls.routingEdges = map(lambda x: RoutingEdge(x), net.getEdges())
         cls.getNeighboringLanes = net.getNeighboringLanes
         cls.getNeighboringEdges = net.getNeighboringEdges
+        # Below two arrays are used to hold node ids which are used for traffic flow from source to target ids
+        cls.sourceNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(4025, 532, 80))
+        cls.targetNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(568, 2659, 80))
 
     @classmethod
     def nodesCount(cls):
@@ -72,5 +76,12 @@ class Network(object):
     # get edge from x and y cordinates of the map
     @classmethod
     def getEdgeFromPosition(cls, x, y, r):
-        #return cls.getNeighboringLanes(x, y, r)
         return cls.getNeighboringEdges(x, y, r)
+
+    # this method was created to generate source and target of the cars 
+    # that will be from the pool or nodes at one side of the map to the
+    # other side of the map.
+    # i.e can be used to make the flow of traffic from one area to the other area in the map
+    @classmethod
+    def getDefinedSourceTargetNodeIds(cls):
+        return random.choice(cls.sourceNodeIds), random.choice(cls.targetNodeIds)
