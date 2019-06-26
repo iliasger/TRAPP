@@ -183,6 +183,34 @@ Finally, let's now run the TunePlanningResolution strategy, which is also the mo
 
 1.  Open `app/adaptation/strategy/TunePlanningResolution.py` and inspect its logic.
 
+###Districting by ZIP code
+To add more realistic origins to the trip simulations, each trip destination can be selected based on the population distribution of the city.  To do this, the city is fist divided into districts and then the population distribution probability is computed using the ZIP code populations of the city. 
+
+1.  First it is necissary to create a file containing the ZIP codes  and their populations for the city using `TRAPP/zipcodes/zipcode.csv` This file contains every ZIP code in the US, the correlated centroids represented in latitude and longitude, and the poplulation of that zipcode from the 2010 United Census Bureas Census. 
+
+	Navigate to the `/home/seams19/TRAPP` and issue `python CensuscityData.py` to create the correct zipcode file for use.
+
+
+1.  Open `app/Config.py` and set the *use_districts* paramter to *True* and the *do_gridding* to *True*.  
+
+	Specify a *districtSize* for the city in meters, which will be approximately the width of the created districts from the network map. 
+	
+	Provide the path for the ZIP code csv file for *zipcodes* and the name of the city.  This name is used to save the district files under `app/map/CityNameDistricts/CityName_districts.xml`
+
+1.   Navigate to the `/home/seams19/TRAPP` and issue `python run.py`. This will not run a simulation but instead it will create the necissary district files.  
+
+	![Bannner](img/district.png)
+
+	The number of districts created will be printed as "Districts: #" If this is not the desired number of districts open `app/Config.py`, adjust *districtSize*, and re-issue `python run.py` in TRAPP. 
+	
+1. Once the district files are created for the specified city open `app/Config.py` and set the *do_gridding* parameter to *False*. 
+
+	Now the district files are created for the specified city and the *do_gridding* does not need to be run again as long as these files are present in `app/map/CityNameDistricts`. 
+
+1. Navigate to the `/home/seams19/TRAPP` and issue `python run.py`. This will automatically pick the origins fo trips using the districts for all runs of the simulation. This feature can be turned off by changing the *use_districts* to *False* in `app/Config.py`. 
+
+1. Repeat steps for each desired city. 
+
 ## Troubleshooting
 
 If you need help in using or extending TRAPP, feel free to contact us:
