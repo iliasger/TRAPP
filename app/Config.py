@@ -23,11 +23,11 @@ sumoConfig = "./app/map/eichstaedt.sumo.cfg"
 sumoNet = "./app/map/eichstaedt.net.xml"
 
 # The total number of cars we use in our simulation
-totalCarCounter = 600
+totalCarCounter = 300
 
 # How long the simulation will run
 # simulation_horizon = 300
-simulation_horizon = 2000
+simulation_horizon = 1000
 
 ######################################
 ##### CONFIGURATION OF PLANNING ######
@@ -37,11 +37,11 @@ simulation_horizon = 2000
 start_with_epos_optimization = False
 
 # How frequently EPOS planning will be invoked (runtime-configurable parameter)
-#planning_period = 100
-planning_period = 600
+planning_period = 100
+# planning_period = 600
 
 # the number of steps to look in the future while planning
-# planning_steps = 3
+# planning_steps = 2
 planning_steps = 1
 
 # how long a planning step should be
@@ -75,10 +75,10 @@ adaptation_strategy = "avoid_overloaded_streets"
 ##### CONFIGURATION OF ACCIDENT ######
 ######################################
 
-restrictTrafficFlow = True              # if true then traffic will flow from source to target nodes as defined below
+restrictTrafficFlow = False              # if true then traffic will flow from source to target nodes as defined below
 trafficSource = (4025, 532, 80)         # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
 trafficTarget = (568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
 triggerAccident = True                  # Trigger accident scenario or not. Below parameters will be considered if this value is True
-accidentFrom = 50                      # simulation tick where accident will happen. Block the road in this case for example
-accidentTill = 100                      # simulation tick when the accident is cleared. Unblock the road in this case for example
+accidentFrom = 200                      # simulation tick where accident will happen. Block the road in this case for example
+accidentTill = 600                      # simulation tick when the accident is cleared. Unblock the road in this case for example
 blockLanes = ["-2788#0_0", "-2788#0_1"] # list of lane ids to block when accident happen
