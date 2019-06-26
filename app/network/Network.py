@@ -44,8 +44,7 @@ class Network(object):
         cls.getNeighboringEdges = net.getNeighboringEdges
         # Below two arrays are used to hold node ids which are used for traffic flow from source to target ids
         if Config.restrictTrafficFlow == True:
-            s = Config.trafficSource
-            t = Config.trafficTarget
+            s, t = Config.trafficSource, Config.trafficTarget
             cls.sourceNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(s[0], s[1], s[2]))
             cls.targetNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(t[0], t[1], t[2]))
 

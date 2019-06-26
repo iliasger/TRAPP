@@ -5,8 +5,8 @@ sys.path.append(os.path.join(os.environ.get("SUMO_HOME"), "tools"))
 from app.logging import info
 from app.routing.CustomRouter import CustomRouter
 from app.network.Network import Network
-#from app.simulation.Simulation import Simulation
-from app.simulation.baseline1 import Simulation
+from app.simulation.Simulation import Simulation
+# from app.simulation.baseline1 import Simulation
 # from app.simulation.baseline2 import Simulation
 # from app.simulation.baseline3 import Simulation
 from colorama import Fore

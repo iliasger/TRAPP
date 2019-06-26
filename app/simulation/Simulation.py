@@ -16,6 +16,7 @@ from app.logging import CSVLogger
 from app.Util import remove_overhead_and_streets_files, prepare_epos_input_data_folders, add_data_folder_if_missing
 from app.adaptation import perform_adaptation
 from app.adaptation import Knowledge
+from app.catastrophe.Accident import getAccidentInstance
 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
@@ -122,3 +123,13 @@ class Simulation(object):
 
             if (cls.tick % Knowledge.planning_period) == 0:
                 CarRegistry.do_epos_planning(cls.tick)
+
+            #Accident check
+            if(Config.triggerAccident == True):
+                if(cls.tick == Config.accidentFrom):
+                    accident = getAccidentInstance()
+                    map(lambda lane: accident.blockLane(lane), Config.blockLanes)
+                if(cls.tick == Config.accidentTill):
+                    accident = getAccidentInstance()
+                    map(lambda lane: accident.openlane(lane), Config.blockLanes)
+                    #[lambda lane: accident.openlane(lane) for lane in Config.blockLanes]
