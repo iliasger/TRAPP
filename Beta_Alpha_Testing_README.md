@@ -68,7 +68,7 @@ TRAPP framework for Traffic Reconfiguration via Adaptive Participatory Planning
 	
 			~~~~
 			agents = {}
-			for i in range(100):
+			for i in range(49):
     				data = get_data_from_file("/Users/taylorpothast/TRAPP/
     					results/baseline/13000/overhead_" + str(i) + ".csv")
     
