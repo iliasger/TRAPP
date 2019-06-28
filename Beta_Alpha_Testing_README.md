@@ -24,7 +24,7 @@ TRAPP framework for Traffic Reconfiguration via Adaptive Participatory Planning
 	* In the Config.py file, set `sumoConfig` equal to the path containing the `sumo.cfg` file and set `sumoNet` equal to the path containing the `.net.xml` file.
 	* Now the new map should be able to run in TRAPP.
 
-1. Use the Districting by ZIP code Step-by-Step Instructions found in the general README.md for more accurate origin selection. 
+1. Use the Distracting by ZIP code Step-by-Step Instructions found in the general README.md for more accurate origin selection. 
 
 	After `app/map/CityNameDistricts/CityName_districts.xml` is created keep the *use_districts* parameter as *True* and the *do_gridding* as *False* in `app/Config.py`. 
 
