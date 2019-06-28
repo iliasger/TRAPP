@@ -55,11 +55,10 @@ class Beta(Strategy):
     # Calls get_constants and grab last line of both global-const.csv and local-const.csv
     # and put in new individual file
     # the file format should be found within resultsFolder created with the specific city name
-    # the file format should be "local_a#_b#_s#_plan#" and "global_a#_b#_s#_plan#",
+    # the file format should be "local_a#_b#_s#" and "global_a#_b#_s#",
     # a- alpha and the # for that run
     # b- beta and the # for that run
     # s- seed and the # for that run
-    # plan# - 10 digit number that is found at output/plan_# and represents
     # the run of simulation in EPOS
     def new_file_for_cost(self,alpha_or_beta):
         #gets output folder path for most recent epos run
