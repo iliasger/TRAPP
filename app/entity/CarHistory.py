@@ -1,5 +1,4 @@
-history_prefs =
-{'car-0': {'balanced': 0.12005719253709682,
+history_prefs = { 'car-0': {'balanced': 0.12005719253709682,
            'max_speed': 0.09998803669039873,
            'min_length': 0.10965834556377793},
  'car-1': {'balanced': 0.13325683722813822,
