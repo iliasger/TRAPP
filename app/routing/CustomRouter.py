@@ -30,6 +30,8 @@ class CustomRouter(object):
     reRouteEveryTicks = 20 # INITIAL JSON DEFINED!!!
 
     accidentInstance = getAccidentInstance()
+    accidentFlag = False
+    accidentEdge = ''
 
     @classmethod
     def init(self):
@@ -41,6 +43,18 @@ class CustomRouter(object):
             self.graph.add_edge(edge.fromNodeID, edge.toNodeID,
                                 {'length': edge.length, 'maxSpeed': edge.maxSpeed,
                                  'lanes': len(edge.lanes), 'edgeID': edge.id})
+        
+        """Register event handler to accident event"""
+        self.accidentInstance.subscribe(self.accidentEventHandler)
+
+    @classmethod
+    def accidentEventHandler(cls, event):
+        if(event.blocked == True):
+            cls.accidentEdge = event.edge
+            cls.accidentFlag = True
+        if(event.blocked == False):
+            cls.accidentFlag = False
+    
 
     @classmethod
     def minimalRoute(cls, fr, to):
@@ -51,7 +65,7 @@ class CustomRouter(object):
 
     @classmethod
     def minimalRouteCostFn(cls, u, v, e, prev_e):
-        if(e['edgeID'] == "-2788#0"):
+        if(e['edgeID'] == cls.accidentEdge and cls.accidentFlag == True):
             return 9999
         else:
             return e['length'] / e['maxSpeed']
@@ -136,7 +150,7 @@ class CustomRouter(object):
 
     @classmethod
     def maxSpeedCostFn(cls, u, v, e, prev_e):
-        if(e['edgeID'] == "-2788#0"):
+        if(e['edgeID'] == cls.accidentEdge and cls.accidentFlag == True):
             return 9999
         else:
             return 1 / e['maxSpeed']
@@ -150,7 +164,7 @@ class CustomRouter(object):
 
     @classmethod
     def minLenCostFn(cls, u, v, e, prev_e):
-        if(e['edgeID'] == "-2788#0"):
+        if(e['edgeID'] == cls.accidentEdge and cls.accidentFlag == True):
             return 9999
         else:
             return e['length']

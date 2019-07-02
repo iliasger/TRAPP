@@ -45,7 +45,7 @@ class Accident(Observable.Observable):
             self._blockedLanes.append(lane)
             traci.lane.setAllowed(lane, self.__allowedWhenBlocked)
             traci.lane.setDisallowed(lane, self.__DisallowedWhenBlocked)
-            getAccidentInstance().fire(lane=lane, blocked=True)
+            getAccidentInstance().fire(lane=lane, blocked=True, edge=self.getEdgeFromlane(lane))
         else:
             print("Lane already blocked")
 
@@ -57,7 +57,7 @@ class Accident(Observable.Observable):
         else:
             traci.lane.setAllowed(lane, [])
             traci.lane.setDisallowed(lane, [])
-            getAccidentInstance().fire(lane=lane, blocked=False)
+            getAccidentInstance().fire(lane=lane, blocked=False, edge=self.getEdgeFromlane(lane))
 
     def setLaneMaxSpeed(self, lane, speed):
         defaultSpeed = traci.lane.getMaxSpeed(lane)
@@ -71,7 +71,7 @@ class Accident(Observable.Observable):
         except:
             self._blockedLanes.append(lane)
             self.setLaneMaxSpeed(lane, 0.5)
-            getAccidentInstance().fire(lane=lane, blocked=True)
+            getAccidentInstance().fire(lane=lane, blocked=True, edge=self.getEdgeFromlane(lane))
         else:
             print("Lane already blocked")
 
@@ -83,7 +83,7 @@ class Accident(Observable.Observable):
         else:
             defaultSpeed = self._defaultSpeeds[lane]
             self.setLaneMaxSpeed(lane, defaultSpeed)
-            getAccidentInstance().fire(lane=lane, blocked=False)
+            getAccidentInstance().fire(lane=lane, blocked=False, edge=self.getEdgeFromlane(lane))
 
     def isBlocked(self, lane):
         return lane in self._blockedLanes
