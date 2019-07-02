@@ -134,3 +134,5 @@ class CustomRouter(object):
     @classmethod
     def calculate_length_of_route(cls, route):
         return sum([cls.edgeMap[e].length for e in route])
+
+    

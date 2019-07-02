@@ -27,6 +27,7 @@ class Accident(Observable.Observable):
     
     _blockedLanes = list()
     _roadBlocked = False
+    _defaultSpeeds = {}
 
     def __init__(self):
         super(Accident, self).__init__()
@@ -59,4 +60,27 @@ class Accident(Observable.Observable):
             getAccidentInstance().fire(lane=lane, blocked=False)
 
     def setLaneMaxSpeed(self, lane, speed):
+        defaultSpeed = traci.lane.getMaxSpeed(lane)
+        self._defaultSpeeds[lane] = defaultSpeed
         traci.lane.setMaxSpeed(lane, speed)
+
+
+    def blockLaneSpeed(self, lane):
+        try:
+            self._blockedLanes.index(lane)
+        except:
+            self._blockedLanes.append(lane)
+            self.setLaneMaxSpeed(lane, 0.5)
+            getAccidentInstance().fire(lane=lane, blocked=True)
+        else:
+            print("Lane already blocked")
+
+    def openlaneSpeed(self, lane):
+        try:
+            self._blockedLanes.remove(lane)
+        except:
+            print("Lane already open")
+        else:
+            defaultSpeed = self._defaultSpeeds[lane]
+            self.setLaneMaxSpeed(lane, defaultSpeed)
+            getAccidentInstance().fire(lane=lane, blocked=False)

@@ -37,8 +37,9 @@ simulation_horizon = 1000
 start_with_epos_optimization = False
 
 # How frequently EPOS planning will be invoked (runtime-configurable parameter)
-planning_period = 100
+# planning_period = 100
 # planning_period = 600
+planning_period = 9999
 
 # the number of steps to look in the future while planning
 # planning_steps = 2
@@ -64,7 +65,8 @@ globalCostFunction="VAR"
 
 # how often adaptation should be triggered
 # adaptation_period = 100
-adaptation_period = 600
+# adaptation_period = 600
+adaptation_period = 9999
 
 # the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
 #adaptation_strategy = "load_balancing"
@@ -75,7 +77,7 @@ adaptation_strategy = "avoid_overloaded_streets"
 ##### CONFIGURATION OF ACCIDENT ######
 ######################################
 
-restrictTrafficFlow = False              # if true then traffic will flow from source to target nodes as defined below
+restrictTrafficFlow = True              # if true then traffic will flow from source to target nodes as defined below
 trafficSource = (4025, 532, 80)         # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
 trafficTarget = (568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
 triggerAccident = True                  # Trigger accident scenario or not. Below parameters will be considered if this value is True
