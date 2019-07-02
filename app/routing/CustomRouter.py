@@ -4,6 +4,7 @@ from dijkstar import Graph, find_path
 
 from app.network.Network import Network
 from app.routing.RouterResult import RouterResult
+from app.catastrophe.Accident import getAccidentInstance
 
 
 class CustomRouter(object):
@@ -28,6 +29,8 @@ class CustomRouter(object):
     # how often we reroute cars
     reRouteEveryTicks = 20 # INITIAL JSON DEFINED!!!
 
+    accidentInstance = getAccidentInstance()
+
     @classmethod
     def init(self):
         """ set up the router using the already loaded network """
@@ -42,9 +45,16 @@ class CustomRouter(object):
     @classmethod
     def minimalRoute(cls, fr, to):
         """creates a minimal route based on length / speed  """
-        cost_func = lambda u, v, e, prev_e: e['length'] / e['maxSpeed']
-        route = find_path(cls.graph, fr, to, cost_func=cost_func)
+        #cost_func = lambda u, v, e, prev_e: e['length'] / e['maxSpeed']
+        route = find_path(cls.graph, fr, to, cost_func=cls.minimalRouteCostFn)
         return RouterResult(route, False)
+
+    @classmethod
+    def minimalRouteCostFn(cls, u, v, e, prev_e):
+        if(e['edgeID'] == "-2788#0"):
+            return 9999
+        else:
+            return e['length'] / e['maxSpeed']
 
     @classmethod
     def route(cls, fr, to, tick, car):
@@ -120,16 +130,30 @@ class CustomRouter(object):
     @classmethod
     def route_by_max_speed(cls, fr, to):
         """ creates a route from the f(node) to the t(node) """
-        cost_func = lambda u, v, e, prev_e: (1 / e['maxSpeed'])
-        route = find_path(cls.graph, fr, to, cost_func=cost_func)
+        #cost_func = lambda u, v, e, prev_e: (1 / e['maxSpeed'])
+        route = find_path(cls.graph, fr, to, cost_func=cls.maxSpeedCostFn)
         return RouterResult(route, False)
+
+    @classmethod
+    def maxSpeedCostFn(cls, u, v, e, prev_e):
+        if(e['edgeID'] == "-2788#0"):
+            return 9999
+        else:
+            return 1 / e['maxSpeed']
 
     @classmethod
     def route_by_min_length(cls, fr, to):
         """ creates a route from the f(node) to the t(node) """
-        cost_func = lambda u, v, e, prev_e: (e['length'])
-        route = find_path(cls.graph, fr, to, cost_func=cost_func)
+        #cost_func = lambda u, v, e, prev_e: (e['length'])
+        route = find_path(cls.graph, fr, to, cost_func=cls.minLenCostFn)
         return RouterResult(route, False)
+
+    @classmethod
+    def minLenCostFn(cls, u, v, e, prev_e):
+        if(e['edgeID'] == "-2788#0"):
+            return 9999
+        else:
+            return e['length']
 
     @classmethod
     def calculate_length_of_route(cls, route):

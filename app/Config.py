@@ -84,3 +84,4 @@ triggerAccident = True                  # Trigger accident scenario or not. Belo
 accidentFrom = 200                      # simulation tick where accident will happen. Block the road in this case for example
 accidentTill = 600                      # simulation tick when the accident is cleared. Unblock the road in this case for example
 blockLanes = ["-2788#0_0", "-2788#0_1"] # list of lane ids to block when accident happen
+blockEdges = ["-2788#0"]

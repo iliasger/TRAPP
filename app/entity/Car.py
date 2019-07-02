@@ -114,7 +114,7 @@ class Car:
 
         self.currentRouteID = self.id + "-" + str(self.rounds)
         # self.currentRouterResult = CustomRouter.route(self.sourceID, self.targetID, tick, self)
-        
+
         if self.driver_preference=="min_length":
             self.currentRouterResult = CustomRouter.route_by_min_length(self.sourceID, self.targetID)
         elif self.driver_preference=="max_speed":

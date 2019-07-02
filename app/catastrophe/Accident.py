@@ -84,3 +84,10 @@ class Accident(Observable.Observable):
             defaultSpeed = self._defaultSpeeds[lane]
             self.setLaneMaxSpeed(lane, defaultSpeed)
             getAccidentInstance().fire(lane=lane, blocked=False)
+
+    def isBlocked(self, lane):
+        return lane in self._blockedLanes
+
+    def getEdgeFromlane(self, lane):
+        return lane.split('_')[0]
+
