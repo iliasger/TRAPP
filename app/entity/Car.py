@@ -11,6 +11,8 @@ from app.routing.RouterResult import RouterResult
 from app.adaptation import Knowledge
 from app.entity.CarHistory import history_prefs
 from app import Config
+from app.catastrophe.Accident import getAccidentInstance
+
 
 class Car:
     """ a abstract class of something that is driving around in the streets """
@@ -50,6 +52,15 @@ class Car:
         self.lastRerouteCounter = 0
 
         self.driver_preference = [key for key, value in sorted(history_prefs[self.id].iteritems(), key=lambda (k,v): (v,k))][0]
+        
+        # get accident instance and register accident event handler
+        self.accident = getAccidentInstance()
+        self.accident.subscribe(self.accidentHandler)
+
+    def accidentHandler(self, event):
+        if(event.blocked== True):
+            self._recreateRoute(self.currentEdgeBeginTick)
+
 
     def setArrived(self, tick):
         """ car arrived at its target, so we add some statistic data """
@@ -126,6 +137,38 @@ class Car:
             traci.route.add(self.currentRouteID, self.currentRouterResult.route)
             # set color to red
             return self.currentRouteID
+        else:
+            if Config.debug:
+                print "exception when adding route for car " + str(self.id)
+
+            # recursion aka. try again as this should work!
+            return self.__createNewRoute(tick)
+
+    # recreate route and update to vehicle when accident happens 
+    def _recreateRoute(self, tick):
+        currentRoute = self.currentRouterResult.route
+        self.currentRouteID = self.id + "-" + str(self.rounds)
+        # self.currentRouterResult = CustomRouter.route(self.sourceID, self.targetID, tick, self)
+
+        if self.driver_preference=="min_length":
+            self.currentRouterResult = CustomRouter.route_by_min_length(self.sourceID, self.targetID)
+        elif self.driver_preference=="max_speed":
+            self.currentRouterResult = CustomRouter.route_by_max_speed(self.sourceID, self.targetID)
+        else:
+            self.currentRouterResult = CustomRouter.minimalRoute(self.sourceID, self.targetID)
+
+        if len(self.currentRouterResult.route) > 0:
+            #self.change_route(self.currentRouterResult.route, True)
+            try:
+                traci.vehicle.setRoute(self.id, self.currentRouterResult.route)
+                traci.vehicle.setColor(self.id, (255,0,0,255))
+            except Exception as e:
+                print(e)
+                # perhaps route does not get set when car is in between the route. 
+                # So In this case we have to evaluate the network tree from the current node i guess.
+                # TODO: Try changing the sourceNodeID to current id where the car is
+                #traci.vehicle.setRoute(self.id, currentRoute)
+
         else:
             if Config.debug:
                 print "exception when adding route for car " + str(self.id)

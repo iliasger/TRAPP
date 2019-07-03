@@ -70,7 +70,7 @@ class Accident(Observable.Observable):
             self._blockedLanes.index(lane)
         except:
             self._blockedLanes.append(lane)
-            self.setLaneMaxSpeed(lane, 0.5)
+            self.setLaneMaxSpeed(lane, 9)
             getAccidentInstance().fire(lane=lane, blocked=True, edge=self.getEdgeFromlane(lane))
         else:
             print("Lane already blocked")

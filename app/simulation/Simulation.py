@@ -128,8 +128,8 @@ class Simulation(object):
             if(Config.triggerAccident == True):
                 if(cls.tick == Config.accidentFrom):
                     accident = getAccidentInstance()
-                    map(lambda lane: accident.blockLane(lane), Config.blockLanes)
+                    map(lambda lane: accident.blockLaneSpeed(lane), Config.blockLanes)
                 if(cls.tick == Config.accidentTill):
                     accident = getAccidentInstance()
-                    map(lambda lane: accident.openlane(lane), Config.blockLanes)
+                    map(lambda lane: accident.openlaneSpeed(lane), Config.blockLanes)
                     #[lambda lane: accident.openlane(lane) for lane in Config.blockLanes]

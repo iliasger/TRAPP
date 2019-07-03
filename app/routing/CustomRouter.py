@@ -47,6 +47,8 @@ class CustomRouter(object):
         """Register event handler to accident event"""
         self.accidentInstance.subscribe(self.accidentEventHandler)
 
+    # Whenever new car enters the route is calculated for it.
+    # This flag is used to put penalty on blocked edges
     @classmethod
     def accidentEventHandler(cls, event):
         if(event.blocked == True):
