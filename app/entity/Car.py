@@ -144,49 +144,62 @@ class Car:
             # recursion aka. try again as this should work!
             return self.__createNewRoute(tick)
 
-    # recreate route and update to vehicle when accident happens 
+    # recreate route and update to vehicle when accident happens
+    # This method is called by Accident event handler 
     def _recreateRoute(self, tick):
         currentRoute = self.currentRouterResult.route
         self.currentRouteID = self.id + "-" + str(self.rounds)
-        # self.currentRouterResult = CustomRouter.route(self.sourceID, self.targetID, tick, self)
+        #determine car's current edge -ve values means car not placed in the simulation yet. positive means car is somewhere in the route
+        currentEdge = traci.vehicle.getRouteIndex(self.id)
+        if currentEdge < 1:
+            if self.driver_preference=="min_length":
+                self.currentRouterResult = CustomRouter.route_by_min_length(self.sourceID, self.targetID)
+            elif self.driver_preference=="max_speed":
+                self.currentRouterResult = CustomRouter.route_by_max_speed(self.sourceID, self.targetID)
+            else:
+                self.currentRouterResult = CustomRouter.minimalRoute(self.sourceID, self.targetID)
 
-        #get the current node
-        try:
-            currentLaneId = traci.vehicle.getLaneID(self.id)
-            currentLane = Network.getLaneFromId(currentLaneId)
-            currentEdgeId = currentLane.getEdge()._id
-            currentNode = Network.getEdgeIDsToNode(currentEdgeId)._id
-        except Exception as err:
-            print(err)
-            #TODO: Find out the problem of this exception
-            return
-
-        if self.driver_preference=="min_length":
-            self.currentRouterResult = CustomRouter.route_by_min_length(currentNode, self.targetID)
-        elif self.driver_preference=="max_speed":
-            self.currentRouterResult = CustomRouter.route_by_max_speed(currentNode, self.targetID)
+            if len(self.currentRouterResult.route) > 0:
+                try:
+                    traci.vehicle.setRoute(self.id, self.currentRouterResult.route)
+                    traci.vehicle.setColor(self.id, (255,0,0,255))
+                except Exception as e:
+                    print(e)
+            else:
+                if Config.debug:
+                    print "exception when adding route for car " + str(self.id)
+                # recursion aka. try again as this should work!
+                return self.__createNewRoute(tick)
         else:
-            self.currentRouterResult = CustomRouter.minimalRoute(currentNode, self.targetID)
-
-        if len(self.currentRouterResult.route) > 0:
-            self.currentRouterResult.route.insert(0, currentEdgeId)
-            #self.change_route(self.currentRouterResult.route, True)
             try:
-                traci.vehicle.setRoute(self.id, self.currentRouterResult.route)
-                traci.vehicle.setColor(self.id, (255,0,0,255))
-            except Exception as e:
-                print(e)
-                # perhaps route does not get set when car is in between the route. 
-                # So In this case we have to evaluate the network tree from the current node i guess.
-                # TODO: Try changing the sourceNodeID to current id where the car is
-                #traci.vehicle.setRoute(self.id, currentRoute)
+                # get node on which the car is currently at
+                currentLaneId = traci.vehicle.getLaneID(self.id)
+                currentLane = Network.getLaneFromId(currentLaneId)
+                currentEdgeId = currentLane.getEdge()._id
+                currentNode = Network.getEdgeIDsToNode(currentEdgeId)._id
+            except Exception as err:
+                print(err)
+                #TODO: Find out the problem of this exception
+                return
+            if self.driver_preference=="min_length":
+                self.currentRouterResult = CustomRouter.route_by_min_length(currentNode, self.targetID)
+            elif self.driver_preference=="max_speed":
+                self.currentRouterResult = CustomRouter.route_by_max_speed(currentNode, self.targetID)
+            else:
+                self.currentRouterResult = CustomRouter.minimalRoute(currentNode, self.targetID)
+            if len(self.currentRouterResult.route) > 0:
+                self.currentRouterResult.route.insert(0, currentEdgeId)
+                try:
+                    traci.vehicle.setRoute(self.id, self.currentRouterResult.route)
+                    traci.vehicle.setColor(self.id, (255,0,0,255))
+                except Exception as e:
+                    print(e)
+            else:
+                if Config.debug:
+                    print "exception when adding route for car " + str(self.id)
+                # recursion aka. try again as this should work!
+                return self.__createNewRoute(tick)
 
-        else:
-            if Config.debug:
-                print "exception when adding route for car " + str(self.id)
-
-            # recursion aka. try again as this should work!
-            return self.__createNewRoute(tick)
 
     def create_epos_output_files_based_on_current_location(self, tick, agent_ind):
         route = traci.vehicle.getRoute(self.id)
