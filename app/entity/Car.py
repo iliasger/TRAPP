@@ -150,14 +150,26 @@ class Car:
         self.currentRouteID = self.id + "-" + str(self.rounds)
         # self.currentRouterResult = CustomRouter.route(self.sourceID, self.targetID, tick, self)
 
+        #get the current node
+        try:
+            currentLaneId = traci.vehicle.getLaneID(self.id)
+            currentLane = Network.getLaneFromId(currentLaneId)
+            currentEdgeId = currentLane.getEdge()._id
+            currentNode = Network.getEdgeIDsToNode(currentEdgeId)._id
+        except Exception as err:
+            print(err)
+            #TODO: Find out the problem of this exception
+            return
+
         if self.driver_preference=="min_length":
-            self.currentRouterResult = CustomRouter.route_by_min_length(self.sourceID, self.targetID)
+            self.currentRouterResult = CustomRouter.route_by_min_length(currentNode, self.targetID)
         elif self.driver_preference=="max_speed":
-            self.currentRouterResult = CustomRouter.route_by_max_speed(self.sourceID, self.targetID)
+            self.currentRouterResult = CustomRouter.route_by_max_speed(currentNode, self.targetID)
         else:
-            self.currentRouterResult = CustomRouter.minimalRoute(self.sourceID, self.targetID)
+            self.currentRouterResult = CustomRouter.minimalRoute(currentNode, self.targetID)
 
         if len(self.currentRouterResult.route) > 0:
+            self.currentRouterResult.route.insert(0, currentEdgeId)
             #self.change_route(self.currentRouterResult.route, True)
             try:
                 traci.vehicle.setRoute(self.id, self.currentRouterResult.route)

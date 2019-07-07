@@ -40,8 +40,10 @@ class Network(object):
         cls.nodes = net.getNodes()
         cls.edges = net.getEdges()
         cls.routingEdges = map(lambda x: RoutingEdge(x), net.getEdges())
+        #assigning network functions to class instance
         cls.getNeighboringLanes = net.getNeighboringLanes
         cls.getNeighboringEdges = net.getNeighboringEdges
+        cls.getLaneFromId = net.getLane
         # Below two arrays are used to hold node ids which are used for traffic flow from source to target ids
         if Config.restrictTrafficFlow == True:
             s, t = Config.trafficSource, Config.trafficTarget
