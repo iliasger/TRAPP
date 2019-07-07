@@ -82,6 +82,6 @@ trafficSource = (4025, 532, 80)         # region where traffic will generate or 
 trafficTarget = (568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
 triggerAccident = True                  # Trigger accident scenario or not. Below parameters will be considered if this value is True
 accidentFrom = 100                      # simulation tick where accident will happen. Block the road in this case for example
-accidentTill = 600                      # simulation tick when the accident is cleared. Unblock the road in this case for example
+accidentTill = 300                      # simulation tick when the accident is cleared. Unblock the road in this case for example
 blockLanes = ["-2788#0_0", "-2788#0_1"] # list of lane ids to block when accident happen
 blockEdges = ["-2788#0"]

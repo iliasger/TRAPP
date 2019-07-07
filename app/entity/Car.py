@@ -60,6 +60,9 @@ class Car:
     def accidentHandler(self, event):
         if(event.blocked== True):
             self._recreateRoute(self.currentEdgeBeginTick)
+        if(event.blocked == False):
+            self._recreateRoute(self.currentEdgeBeginTick)
+            traci.vehicle.setColor(self.id, (0,255,0,255))
 
 
     def setArrived(self, tick):
