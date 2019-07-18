@@ -1,0 +1,38 @@
+Manhattan
+=========
+10000 cars
+# Nodes: 6758 / Edges: 12658
+# Total street length: 1,075,285 m
+density (cars / total street length) = 0.0093
+~20% increase in LC from b=1 to b=0
+~50% decrease in GC from b=1 to b=0
+
+
+Duluth
+=========
+14000 cars
+# Nodes: 5607 / Edges: 14317
+# Total street length: 2,142,437 m
+density (cars / total street length) = 0.0065
+~30% increase in LC from b=1 to b=0
+~34% decrease in GC from b=1 to b=0
+
+
+Boulder
+=========
+13000 cars
+# Nodes: 7740 / Edges: 16625
+# Total street length: 1,244,896 m
+density (cars / total street length) = 0.0104
+~77% increase in LC from b=1 to b=0
+~33% decrease in GC from b=1 to b=0
+
+
+Annapolis
+=========
+8000 cars
+# Nodes: 2555 / Edges: 5691
+# Total street length: 543,028 m
+density (cars / total street length) = 0.0147
+~66% increase in LC from b=1 to b=0
+~20% decrease in GC from b=1 to b=0
