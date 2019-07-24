@@ -9,9 +9,12 @@ from numpy import mean
 
 class AvoidOverLoadedStreets(Strategy):
 
+    # monitors the streets and its utilization
+    # @return streed_data:{<streetNumber>, <utilization>}
     def monitor(self):
         return Util.get_street_utilizations(Knowledge.time_of_last_adaptation, adaptation_period)[0]
 
+    # returns the list of streetIDs that are overloaded
     def analyze(self, utilizations):
         overloaded_streets = []
         for street, utilizations in utilizations.iteritems():

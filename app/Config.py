@@ -39,14 +39,14 @@ start_with_epos_optimization = False
 # How frequently EPOS planning will be invoked (runtime-configurable parameter)
 # planning_period = 100
 # planning_period = 600
-planning_period = 9999
+planning_period = 200
 
 # the number of steps to look in the future while planning
 # planning_steps = 2
-planning_steps = 1
+planning_steps = 2
 
 # how long a planning step should be
-planning_step_horizon = 50
+planning_step_horizon = 300
 
 # double from [0, 1], unfairness
 alpha = 0
@@ -66,7 +66,7 @@ globalCostFunction="VAR"
 # how often adaptation should be triggered
 # adaptation_period = 100
 # adaptation_period = 600
-adaptation_period = 9999
+adaptation_period = 200
 
 # the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
 #adaptation_strategy = "load_balancing"
@@ -81,7 +81,10 @@ restrictTrafficFlow = True              # if true then traffic will flow from so
 trafficSource = (4025, 532, 80)         # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
 trafficTarget = (568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
 triggerAccident = True                  # Trigger accident scenario or not. Below parameters will be considered if this value is True
-accidentFrom = 100                      # simulation tick where accident will happen. Block the road in this case for example
-accidentTill = 300                      # simulation tick when the accident is cleared. Unblock the road in this case for example
+accidentFrom = 200                      # simulation tick where accident will happen. Block the road in this case for example
+accidentTill = 500                      # simulation tick when the accident is cleared. Unblock the road in this case for example
 blockLanes = ["-2788#0_0", "-2788#0_1"] # list of lane ids to block when accident happen
 blockEdges = ["-2788#0"]
+blockedLaneSpeed = 0.5
+
+calculateSimilarity = True

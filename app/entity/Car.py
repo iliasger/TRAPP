@@ -58,11 +58,13 @@ class Car:
         self.accident.subscribe(self.accidentHandler)
 
     def accidentHandler(self, event):
-        if(event.blocked== True):
-            self._recreateRoute(self.currentEdgeBeginTick)
-        if(event.blocked == False):
-            self._recreateRoute(self.currentEdgeBeginTick)
-            traci.vehicle.setColor(self.id, (0,255,0,255))
+        pass
+        # uncomment when not using epos adaptation and planning in simulation.py
+        # if(event.blocked== True):
+        #     self._recreateRoute(self.currentEdgeBeginTick)
+        # if(event.blocked == False):
+        #     self._recreateRoute(self.currentEdgeBeginTick)
+        #     traci.vehicle.setColor(self.id, (0,255,0,255))
 
 
     def setArrived(self, tick):

@@ -118,12 +118,6 @@ class Simulation(object):
                 print("Simulation horizon reached!")
                 return
 
-            if (cls.tick % Config.adaptation_period) == 0:
-                perform_adaptation(cls.tick)
-
-            if (cls.tick % Knowledge.planning_period) == 0:
-                CarRegistry.do_epos_planning(cls.tick)
-
             #Accident check
             if(Config.triggerAccident == True):
                 if(cls.tick == Config.accidentFrom):
@@ -133,3 +127,9 @@ class Simulation(object):
                     accident = getAccidentInstance()
                     map(lambda lane: accident.openlaneSpeed(lane), Config.blockLanes)
                     #[lambda lane: accident.openlane(lane) for lane in Config.blockLanes]
+
+            if (cls.tick % Config.adaptation_period) == 0:
+                perform_adaptation(cls.tick)
+
+            if (cls.tick % Knowledge.planning_period) == 0:
+                CarRegistry.do_epos_planning(cls.tick)

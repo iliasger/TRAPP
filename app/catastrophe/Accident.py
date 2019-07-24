@@ -5,6 +5,7 @@
 import traci
 import traci.constants as tc
 import Observable as Observable
+from app import Config
 
 # singleton instance
 # use one instance of the class Accident by always summoning 
@@ -70,7 +71,7 @@ class Accident(Observable.Observable):
             self._blockedLanes.index(lane)
         except:
             self._blockedLanes.append(lane)
-            self.setLaneMaxSpeed(lane, 9)
+            self.setLaneMaxSpeed(lane, Config.blockedLaneSpeed)
             getAccidentInstance().fire(lane=lane, blocked=True, edge=self.getEdgeFromlane(lane))
         else:
             print("Lane already blocked")
