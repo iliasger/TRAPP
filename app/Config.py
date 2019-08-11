@@ -86,5 +86,3 @@ accidentTill = 500                      # simulation tick when the accident is c
 blockLanes = ["-2788#0_0", "-2788#0_1"] # list of lane ids to block when accident happen
 blockEdges = ["-2788#0"]
 blockedLaneSpeed = 0.5
-
-calculateSimilarity = True

@@ -8,7 +8,6 @@ from app.entity.Car import Car
 from app.Util import  prepare_epos_input_data_folders
 from app.Util import get_output_folder_for_latest_EPOS_run
 from app.adaptation import Knowledge
-from app.catastrophe.PlanSimilarity import PlanSimilarity
 
 class NullCar:
     """ a car with no function used for error prevention """
@@ -74,9 +73,6 @@ class CarRegistry(object):
 
         number_of_epos_plans = len([name for name in os.listdir('datasets/plans') if name.endswith("plans")])
         print "Number of EPOS plans: " + str(number_of_epos_plans)
-        #calculate similarity between the plans
-        if Config.calculateSimilarity is True:
-            PlanSimilarity.evaluate()
 
         Knowledge.time_of_last_EPOS_invocation = tick
         
