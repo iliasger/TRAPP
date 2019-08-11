@@ -6,6 +6,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.metrics import jaccard_similarity_score as jss
 
+from AnalysisGraph import generateGraph
+
 class PlanSimilarity(object):
 
     filePlans = []
@@ -20,7 +22,7 @@ class PlanSimilarity(object):
         if(os.path.exists('analysis/similarity_analysis.csv')):
             os.remove('analysis/similarity_analysis.csv')
             with open('analysis/similarity_analysis.csv', 'a') as summary:
-                summary.write('Plan file, plan diff, Entropy, Cosine, Hamming, Euclidean\n')
+                summary.write('Plan file, plan diff, Entropy, Cosine, Hamming Similarity, Hamming Dist, Euclidean\n')
 
     @classmethod
     def _readPlans(cls):
@@ -45,10 +47,12 @@ class PlanSimilarity(object):
         cosine = cls.calculateCosineSimilarity()['similarity']
         #cls.JaccardSimilarity()
         euclidean = cls.calculateEuclideanDistance()['distance']
-        hamming = cls.calculateHammingDistance()['similarity']
-        csv_details = ('%s , s1-s2, %f, %f, %f, %f \n' %(fileName, entropy[0], cosine[0], hamming[0], euclidean[0]))
-        csv_details += ('%s , s1-s3, %f, %f, %f, %f \n' %(fileName, entropy[1], cosine[1], hamming[1], euclidean[1]))
-        csv_details += ('%s , s2-s3, %f, %f, %f, %f \n' %(fileName, entropy[2], cosine[2], hamming[2], euclidean[2]))
+        hamming = cls.calculateHammingDistance()
+        hammingSimilarity = hamming['similarity']
+        hammingDist = hamming['distance']
+        csv_details = ('%s , s1-s2, %f, %f, %f, %f, %f \n' %(fileName, entropy[0], cosine[0], hammingSimilarity[0], hammingDist[0], euclidean[0]))
+        csv_details += ('%s , s1-s3, %f, %f, %f, %f, %f \n' %(fileName, entropy[1], cosine[1], hammingSimilarity[1], hammingDist[1], euclidean[1]))
+        csv_details += ('%s , s2-s3, %f, %f, %f, %f, %f \n' %(fileName, entropy[2], cosine[2], hammingSimilarity[2], hammingDist[2], euclidean[2]))
         return csv_details  
 
     @classmethod
@@ -164,12 +168,15 @@ class PlanSimilarity(object):
         # print('PAIRED DISTANCES BETWEEN 3 ARRAYS')
         # print('bitwise matching')
         # print('finds at which position the bits are different')
+        # print('1 is maximum distance means string did not match on any position')
         # print('------------------------------------')
         # print('s1-s2| %f, %f%% matched' % (d1,(1-n1)*100) )
         # print('s1-s3| %f, %f%% matched' % (d2,(1-n2)*100) )
         # print('s2-s3| %f, %f%% matched' % (d3,(1-n3)*100) )
         resObj = {
-            "similarity": ( (1-n1)*100, (1-n2)*100, (1-n3)* 100 )
+            #"similarity": ( (1-d1)*100, (1-d2)*100, (1-d3)* 100 ),
+            "similarity": ( (1-n1)*100, (1-n2)*100, (1-n3)* 100 ),
+            "distance": ( d1, d2, d3 )
         }
         return resObj
 
@@ -192,4 +199,8 @@ class PlanSimilarity(object):
         # print('s1-s3| %f%% similar' % (d2 * 100))
         # print('s2-s3| %f%% similar' % (d3 * 100))
 
-PlanSimilarity.evaluate()
+#PlanSimilarity.evaluate()
+generateGraph(2, "Entropy")
+#generateGraph(4, 'Hamming Similarity')
+#generateGraph(5, 'Hamming Distance')
+#generateGraph(6, 'Euclidean Distance')
