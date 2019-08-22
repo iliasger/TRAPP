@@ -206,7 +206,9 @@ class Car:
                 return self.__createNewRoute(tick)
 
 
-    def create_epos_output_files_based_on_current_location(self, tick, agent_ind):
+    def getCurrentEdgeID(self):
+        """Get car's route and get the id of the route on which car is currently at."""
+
         route = traci.vehicle.getRoute(self.id)
         route_index = traci.vehicle.getRouteIndex(self.id)
         if route_index < 0:
@@ -214,6 +216,13 @@ class Car:
                 print self.id + "\thas not yet started its trip and won't be considered in the optimization."
             return False
         previousEdgeID = route[route_index]
+        return previousEdgeID
+
+
+    def create_epos_output_files_based_on_current_location(self, tick, agent_ind):
+        previousEdgeID = self.getCurrentEdgeID()
+        if previousEdgeID == False:
+            return False
         previousNodeID = Network.getEdgeIDsToNode(previousEdgeID).getID()
 
         if previousNodeID == self.targetID:
@@ -225,8 +234,10 @@ class Car:
         return True
 
     def create_epos_output_files(self, sourceID, targetID, tick, agent_ind):
+        currentRoute = traci.vehicle.getRoute(self.id)
 
         router_res_length = CustomRouter.route_by_min_length(sourceID, targetID)
+        #router_res_length = CustomRouter.dynamicRouter(sourceID, targetID, currentRoute)
         if len(router_res_length.route) > 0:
             self.create_output_files(
                 history_prefs[self.id]["min_length"],
@@ -235,6 +246,7 @@ class Car:
                 agent_ind)
 
         router_res_speeds = CustomRouter.route_by_max_speed(sourceID, targetID)
+        #router_res_speeds = router_res_length
         if len(router_res_speeds.route) > 0:
             self.create_output_files(
                 history_prefs[self.id]["max_speed"],
@@ -249,6 +261,15 @@ class Car:
                 router_res_length_and_speeds.route,
                 self.find_occupancy_for_route(router_res_length_and_speeds.meta),
                 agent_ind)
+
+        # router_dynamic = router_res_length
+        # if len(router_dynamic.route) > 0:
+        #     self.create_output_files(
+        #         history_prefs[self.id]["balanced"],
+        #         router_dynamic.route,
+        #         self.find_occupancy_for_route(router_dynamic.meta),
+        #         agent_ind)
+
 
     def create_output_files(self, cost, route, all_routes, agent_ind):
 

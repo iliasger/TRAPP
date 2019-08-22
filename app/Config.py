@@ -49,10 +49,10 @@ planning_steps = 2
 planning_step_horizon = 300
 
 # double from [0, 1], unfairness
-alpha = 0
+alpha = 1
 
 # double from [0, 1], selfishness or local objective
-beta = 1
+beta = 0
 # unfairness + selfishness <= 1
 # alpha*unfairness + beta*local_cost + (1-alpha-beta)*global_costs
 

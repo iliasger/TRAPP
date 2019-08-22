@@ -1,4 +1,6 @@
 from random import gauss
+import traci
+import random
 
 from dijkstar import Graph, find_path
 
@@ -175,4 +177,45 @@ class CustomRouter(object):
     def calculate_length_of_route(cls, route):
         return sum([cls.edgeMap[e].length for e in route])
 
-    
+    @classmethod
+    def dynamicRouter(cls, fr, to, currentRoute):
+        """ this is a dynamic fourth custom router that will check
+         the cars on the next edge and increase the cost respectively"""
+        def dynamicTrafficCostFunc(u, v, e, prev_e):
+                stre = str(e['edgeID'])   # to remove unicode encoding u'2814#3'
+                if(e['edgeID'] == cls.accidentEdge and cls.accidentFlag == True):
+                    return 9999
+                elif( len(currentRoute) > 1):
+                    # find the current edge in route in route list
+                    try:
+                        carAtEdge = currentRoute.index(stre)
+                        if carAtEdge < (len(currentRoute) - 3):
+                            numCarsOnLane = traci.edge.getLastStepVehicleNumber(stre)
+                            numCarsOnLane1 = traci.edge.getLastStepVehicleNumber(currentRoute[carAtEdge+1])
+                            numCarsOnLane2 = traci.edge.getLastStepVehicleNumber(currentRoute[carAtEdge+2])
+
+                            if numCarsOnLane + numCarsOnLane1 + numCarsOnLane2 > 10:
+                                # todo randomize assign high value to some and normal to others
+                                randno = random.uniform(0,1)
+                                if randno > 0.5:
+                                    return 5000
+                                else:
+                                    return e['length']
+                            else:
+                                return e['length']
+                        else:
+                            return e['length']
+                    except:
+                        return e['length']
+                else:
+                    return e['length']    
+
+        route = find_path(cls.graph, fr, to, cost_func=dynamicTrafficCostFunc)
+        return RouterResult(route, False)    
+
+    # @classmethod
+    # def dynamicTrafficCostFunc(cls, u, v, e, prev_e):
+    #     if(e['edgeID'] == cls.accidentEdge and cls.accidentFlag == True):
+    #         return 9999
+    #     else:
+    #         return e['length']

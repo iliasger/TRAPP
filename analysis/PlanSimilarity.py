@@ -199,8 +199,9 @@ class PlanSimilarity(object):
         # print('s1-s3| %f%% similar' % (d2 * 100))
         # print('s2-s3| %f%% similar' % (d3 * 100))
 
-#PlanSimilarity.evaluate()
-generateGraph(2, "Entropy")
+PlanSimilarity.evaluate()
+#generateGraph(2, "Entropy")
+#generateGraph(3, "Cosine Similarity")
 #generateGraph(4, 'Hamming Similarity')
 #generateGraph(5, 'Hamming Distance')
 #generateGraph(6, 'Euclidean Distance')
