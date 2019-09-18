@@ -114,6 +114,9 @@ class CustomRouter(object):
             cls.freshnessUpdateFactor * \
             victimizationChoice
 
+        # cost_func = lambda u, v, e, prev_e: \
+        #     cls.getAverageEdgeDuration(e["edgeID"]) 
+            
         # generate route
         route = find_path(cls.graph, fr, to, cost_func=cost_func)
         # wrap the route in a result object

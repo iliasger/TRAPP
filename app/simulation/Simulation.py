@@ -105,7 +105,8 @@ class Simulation(object):
                     print str(removedCarId) + "\treached its destination at tick " + str(cls.tick)
                 CarRegistry.findById(removedCarId).setArrived(cls.tick)
 
-            CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
+            # Log street utilization
+            # CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
 
             # print status update if we are not running in parallel mode
             if (cls.tick % 100) == 0:

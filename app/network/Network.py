@@ -1,5 +1,6 @@
 import sumolib
 import random
+from random import randrange
 
 from app import Config
 from app.routing.RoutingEdge import RoutingEdge
@@ -23,6 +24,8 @@ class Network(object):
     nodeIds = None
     edgeIds = None
     routingEdges = None
+    sourceNodeIds = []      # 2d array holds array of source nodes ids used for generating traffic from specific source
+    targetNodeIds = []      # same as above but for target : Note: element of this array should be equal to the elemenet of sourceNodeId. len(sourceNodeIds) == len(targetNodeIds)
 
     @classmethod
     def loadNetwork(cls):
@@ -47,8 +50,25 @@ class Network(object):
         # Below two arrays are used to hold node ids which are used for traffic flow from source to target ids
         if Config.restrictTrafficFlow == True:
             s, t = Config.trafficSource, Config.trafficTarget
-            cls.sourceNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(s[0], s[1], s[2]))
-            cls.targetNodeIds = map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), Network.getEdgeFromPosition(t[0], t[1], t[2]))
+            allSourceEdges = cls.getEdgesFromPositionArray(s)
+            allTargetEdges = cls.getEdgesFromPositionArray(t)
+            for se in allSourceEdges:
+                cls.sourceNodeIds.append(map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), se))
+            for te in allTargetEdges:
+                cls.targetNodeIds.append(map(lambda x : Network.getEdgeIDsToNode(x[0].getID()).getID(), te))
+
+    @classmethod
+    def getEdgesFromPositionArray(cls, arr):
+        "concatinate all edges retrieved from position and radius"
+        edgeArr = []
+        for x in range(len(arr)):
+            edgesFromPos = map(lambda x: Network.getEdgeFromPosition(x[0], x[1], x[2]),  arr[x])
+            allEdges = []
+            for i in edgesFromPos:
+                for j in i:
+                    allEdges.append(j)
+            edgeArr.append(allEdges)
+        return edgeArr
 
     @classmethod
     def nodesCount(cls):
@@ -88,4 +108,5 @@ class Network(object):
     # i.e can be used to make the flow of traffic from one area to the other area in the map
     @classmethod
     def getDefinedSourceTargetNodeIds(cls):
-        return random.choice(cls.sourceNodeIds), random.choice(cls.targetNodeIds)
+        randIndex = randrange(len(cls.sourceNodeIds))
+        return random.choice(cls.sourceNodeIds[randIndex]), random.choice(cls.targetNodeIds[randIndex])

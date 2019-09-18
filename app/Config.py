@@ -23,11 +23,11 @@ sumoConfig = "./app/map/eichstaedt.sumo.cfg"
 sumoNet = "./app/map/eichstaedt.net.xml"
 
 # The total number of cars we use in our simulation
-totalCarCounter = 300
+totalCarCounter = 200
 
 # How long the simulation will run
 # simulation_horizon = 300
-simulation_horizon = 1000
+simulation_horizon = 1400
 
 ######################################
 ##### CONFIGURATION OF PLANNING ######
@@ -39,7 +39,8 @@ start_with_epos_optimization = False
 # How frequently EPOS planning will be invoked (runtime-configurable parameter)
 # planning_period = 100
 # planning_period = 600
-planning_period = 200
+# planning_period = 200
+planning_period = 9000
 
 # the number of steps to look in the future while planning
 # planning_steps = 2
@@ -52,7 +53,7 @@ planning_step_horizon = 300
 alpha = 1
 
 # double from [0, 1], selfishness or local objective
-beta = 0
+beta = 1
 # unfairness + selfishness <= 1
 # alpha*unfairness + beta*local_cost + (1-alpha-beta)*global_costs
 
@@ -66,7 +67,8 @@ globalCostFunction="VAR"
 # how often adaptation should be triggered
 # adaptation_period = 100
 # adaptation_period = 600
-adaptation_period = 200
+# adaptation_period = 200
+adaptation_period = 9000
 
 # the actual adaptation logic. Possible values: "load_balancing", "avoid_overloaded_streets", "tune_planning_resolution"
 #adaptation_strategy = "load_balancing"
@@ -78,9 +80,9 @@ adaptation_strategy = "avoid_overloaded_streets"
 ######################################
 
 restrictTrafficFlow = True              # if true then traffic will flow from source to target nodes as defined below
-trafficSource = (4025, 532, 80)         # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
-trafficTarget = (568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
-triggerAccident = True                  # Trigger accident scenario or not. Below parameters will be considered if this value is True
+trafficSource = [[(3951, 161, 80), (3890, 314, 80), (4340,501,60), (3237,1246,70), (3099, 1078, 30), (2966, 501, 50), (3730, 1486, 50),(4355, 18, 50), (4088, 868,50), (4447, 371, 80), (2981, 1501, 50)], [(2645,2762,50), (2540,2327,50,), (2540,2012, 80), (3052,1822,50)]]       # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
+trafficTarget = [[(446, 1627, 80), (7, 2155, 50), (198, 2028, 50)], [(2167, 800, 50), (1883, 878, 50)]] #(568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
+triggerAccident = False                  # Trigger accident scenario or not. Below parameters will be considered if this value is True
 accidentFrom = 200                      # simulation tick where accident will happen. Block the road in this case for example
 accidentTill = 500                      # simulation tick when the accident is cleared. Unblock the road in this case for example
 blockLanes = ["-2788#0_0", "-2788#0_1"] # list of lane ids to block when accident happen
