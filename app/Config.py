@@ -8,7 +8,7 @@ sumoUseGUI = True  # False
 debug = False  # False
 
 # which seed to be used in the random functions, for repeatability
-random_seed = 1
+random_seed = 10
 
 epos_jar_path = "C:\\Users\\Shoaib\\Documents\\Lectures\\Thesis\\docs\\release-0.0.1\\epos-tutorial.jar"
 
@@ -23,7 +23,7 @@ sumoConfig = "./app/map/eichstaedt.sumo.cfg"
 sumoNet = "./app/map/eichstaedt.net.xml"
 
 # The total number of cars we use in our simulation
-totalCarCounter = 200
+totalCarCounter = 1000
 
 # How long the simulation will run
 # simulation_horizon = 300
@@ -80,8 +80,8 @@ adaptation_strategy = "avoid_overloaded_streets"
 ######################################
 
 restrictTrafficFlow = True              # if true then traffic will flow from source to target nodes as defined below
-trafficSource = [[(3951, 161, 80), (3890, 314, 80), (4340,501,60), (3237,1246,70), (3099, 1078, 30), (2966, 501, 50), (3730, 1486, 50),(4355, 18, 50), (4088, 868,50), (4447, 371, 80), (2981, 1501, 50)], [(2645,2762,50), (2540,2327,50,), (2540,2012, 80), (3052,1822,50)]]       # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
-trafficTarget = [[(446, 1627, 80), (7, 2155, 50), (198, 2028, 50)], [(2167, 800, 50), (1883, 878, 50)]] #(568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
+trafficSource = [[(3951, 161, 80), (3890, 314, 80), (4340,501,60), (3237,1246,70), (3099, 1078, 30), (2966, 501, 50), (3730, 1486, 50),(4355, 18, 50), (4088, 868,50), (4447, 371, 80), (2981, 1501, 50)], [(2645,2762,50), (2540,2327,50,), (2540,2012, 80), (3052,1822,50)], [(1147, 2949, 50), (1693, 2673, 40), (1795,2555,40)]]       # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
+trafficTarget = [[(446, 1627, 80), (7, 2155, 50), (198, 2028, 50)], [(2167, 800, 50), (1883, 878, 50)], [(2921, 456, 50), (2987, 507, 50)]] #(568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
 triggerAccident = False                  # Trigger accident scenario or not. Below parameters will be considered if this value is True
 accidentFrom = 200                      # simulation tick where accident will happen. Block the road in this case for example
 accidentTill = 500                      # simulation tick when the accident is cleared. Unblock the road in this case for example
