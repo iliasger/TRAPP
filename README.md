@@ -54,7 +54,7 @@ TRAPP framework for Traffic Reconfiguration via Adaptive Participatory Planning
 
 1.  Download and install [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
 
-1.  Download the OVA file available at [www4.in.tum.de/~gerostat/TRAPP-SEAMS19.ova](www4.in.tum.de/~gerostat/TRAPP-SEAMS19.ova) and import it in Virtualbox. Give the VM at least 2GB of RAM to run.
+1.  Download the OVA file available at [wwwbroy.in.tum.de/~gerostat/TRAPP-SEAMS19.ova](www4.in.tum.de/~gerostat/TRAPP-SEAMS19.ova) and import it in Virtualbox. Give the VM at least 2GB of RAM to run.
 
 1.  Login to the VM by using the `seams19` password. (Disconnect any external monitors or keyboard/mouse if you face problems with the display in Virtualbox.)
 
