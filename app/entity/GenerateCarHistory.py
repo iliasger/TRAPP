@@ -3,7 +3,7 @@ import random
 import json
 random.seed(1)
 
-NUMBER_OF_CARS = 1400
+NUMBER_OF_CARS = 5000
 
 def generateRandomNo():
     return random.uniform(0,1)

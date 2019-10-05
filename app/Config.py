@@ -18,16 +18,18 @@ epos_jar_path = "C:\\Users\\Shoaib\\Documents\\Lectures\\Thesis\\docs\\release-0
 
 # The network config (links to the net) we use for our simulation
 sumoConfig = "./app/map/eichstaedt.sumo.cfg"
+#sumoConfig = "./app/map/Annapolis_map/Annapolis.sumo.cfg"
 
 # The network net we use for our simulation
 sumoNet = "./app/map/eichstaedt.net.xml"
+#sumoNet = "./app/map/Annapolis_map/AnnapolisPassenger.net.xml"
 
 # The total number of cars we use in our simulation
-totalCarCounter = 1000
+totalCarCounter = 3000
 
 # How long the simulation will run
 # simulation_horizon = 300
-simulation_horizon = 1400
+simulation_horizon = 600
 
 ######################################
 ##### CONFIGURATION OF PLANNING ######
@@ -80,8 +82,14 @@ adaptation_strategy = "avoid_overloaded_streets"
 ######################################
 
 restrictTrafficFlow = True              # if true then traffic will flow from source to target nodes as defined below
-trafficSource = [[(3951, 161, 80), (3890, 314, 80), (4340,501,60), (3237,1246,70), (3099, 1078, 30), (2966, 501, 50), (3730, 1486, 50),(4355, 18, 50), (4088, 868,50), (4447, 371, 80), (2981, 1501, 50)], [(2645,2762,50), (2540,2327,50,), (2540,2012, 80), (3052,1822,50)], [(1147, 2949, 50), (1693, 2673, 40), (1795,2555,40)]]       # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
-trafficTarget = [[(446, 1627, 80), (7, 2155, 50), (198, 2028, 50)], [(2167, 800, 50), (1883, 878, 50)], [(2921, 456, 50), (2987, 507, 50)]] #(568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
+# Eichsatt
+#trafficSource = [[(3951, 161, 80), (3890, 314, 80), (4340,501,60), (3237,1246,70), (3099, 1078, 30), (2966, 501, 50), (3730, 1486, 50),(4355, 18, 50), (4088, 868,50), (4447, 371, 80), (2981, 1501, 50)], [(2645,2762,50), (2540,2327,50,), (2540,2012, 80), (3052,1822,50)], [(1147, 2949, 50), (1693, 2673, 40), (1795,2555,40)]]       # region where traffic will generate or start from. Tuple: (x-position, y-position, radius) on the map
+#trafficTarget = [[(446, 1627, 80), (7, 2155, 50), (198, 2028, 50)], [(2167, 800, 50), (1883, 878, 50)], [(2921, 456, 50), (2987, 507, 50)]] #(568, 2659, 80)         # Target of the traffic. Tuple: (x-position, y-position, radius) on the map
+trafficSource = [[(2496,1860,400)],[(1584,1708,500)],[(1293,2834,500)],[(522,2677,500)],[(1274,2223,500)]]
+trafficTarget = [[(3966,486,500)],[(3966,486,500)],[(3966,486,500)],[(3966,486,500)],[(3966,486,500)]]
+# Annapolis
+#trafficSource = [[(2499,6000,600)],[(3469,7026,600)],[(4235,7619,600)],[(3401,6241,600)],[(5860,5079,500)],[(4840,3226,500)],[(1362,7928,500)],[(3240,8008,500)]]
+#trafficTarget = [[(4964,6062,300)],[(4964,6062,300)],[(4964,6062,300)],[(4964,6062,300)],[(1615,6229,500)],[(1615,6229,500)],[(1615,6229,500)],[(1615,6229,500)]]
 triggerAccident = False                  # Trigger accident scenario or not. Below parameters will be considered if this value is True
 accidentFrom = 200                      # simulation tick where accident will happen. Block the road in this case for example
 accidentTill = 500                      # simulation tick when the accident is cleared. Unblock the road in this case for example
