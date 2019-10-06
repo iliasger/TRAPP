@@ -101,12 +101,16 @@ class Car:
         self.currentRouteID = self.id + "-" + str(self.rounds)
 
         try:
+            kselectedRoutes = CustomRouter.route_by_kSelection(self.sourceID, self.targetID)
             if self.driver_preference=="min_length":
-                self.currentRouterResult = CustomRouter.route_by_min_length(self.sourceID, self.targetID)
+                #self.currentRouterResult = CustomRouter.route_by_min_length(self.sourceID, self.targetID)
+                self.currentRouterResult = kselectedRoutes[0]
             elif self.driver_preference=="max_speed":
-                self.currentRouterResult = CustomRouter.route_by_max_speed(self.sourceID, self.targetID)
+                #self.currentRouterResult = CustomRouter.route_by_max_speed(self.sourceID, self.targetID)
+                self.currentRouterResult = kselectedRoutes[1]
             else:
-                self.currentRouterResult = CustomRouter.minimalRoute(self.sourceID, self.targetID)
+                #self.currentRouterResult = CustomRouter.minimalRoute(self.sourceID, self.targetID)
+                self.currentRouterResult = kselectedRoutes[2]
 
             if len(self.currentRouterResult.route) > 0:
                 traci.route.add(self.currentRouteID, self.currentRouterResult.route)

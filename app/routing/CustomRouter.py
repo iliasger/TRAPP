@@ -1,3 +1,4 @@
+import random
 from random import gauss
 
 from dijkstar import Graph, find_path
@@ -134,3 +135,38 @@ class CustomRouter(object):
     @classmethod
     def calculate_length_of_route(cls, route):
         return sum([cls.edgeMap[e].length for e in route])
+
+    @classmethod
+    def route_by_kSelection(cls, fr, to):
+        cost_func = cls.kSelectionCostFn([])
+        route1 = find_path(cls.graph, fr, to, cost_func=cost_func)
+        route1edgeLen = len(route1.edges)
+        rand1 = int(random.uniform(0, route1edgeLen - 1))
+        rejectedEdge1 = route1.edges[rand1]
+        cost_func2 = cls.kSelectionCostFn([rejectedEdge1['edgeID']])
+        route2 = find_path(cls.graph, fr, to, cost_func=cost_func2)
+        route2edgeLen = len(route2.edges)
+        rand2 = int(random.uniform(0, route2edgeLen -1))
+        rejectedEdge2 = route2.edges[rand2]
+        cost_func3 = cls.kSelectionCostFn([rejectedEdge1['edgeID'], rejectedEdge2['edgeID']])
+        route3 = find_path(cls.graph, fr, to, cost_func=cost_func3)
+        #return (route1, route2, route3)
+        return (RouterResult(route1, False), RouterResult(route2, False), RouterResult(route3, False))
+
+    @classmethod
+    def kSelectionCostFn(cls, edgesToPanalize):
+        def costFn(u, v, e, prev_e):
+            edgeArrLen = len(edgesToPanalize)
+            if(edgeArrLen == 0):
+                return e['length']
+            elif (edgeArrLen == 1):
+                if(e['edgeID'] == edgesToPanalize[0]):
+                    return 9999
+                else:
+                    return e['length']  
+            elif (edgeArrLen == 2):
+                if(e['edgeID'] == edgesToPanalize[0] or e['edgeID'] == edgesToPanalize[1]):
+                    return 9999
+                else:
+                    return e['length']
+        return costFn
