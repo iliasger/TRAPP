@@ -144,8 +144,10 @@ class Car:
         return True
 
     def create_epos_output_files(self, sourceID, targetID, tick, agent_ind):
+        kselectedRoutes = CustomRouter.route_by_kSelection(self.sourceID, self.targetID)
 
-        router_res_length = CustomRouter.route_by_min_length(sourceID, targetID)
+        #router_res_length = CustomRouter.route_by_min_length(sourceID, targetID)
+        router_res_length = kselectedRoutes[0]
         if len(router_res_length.route) > 0:
             self.create_output_files(
                 history_prefs[self.id]["min_length"],
@@ -153,7 +155,8 @@ class Car:
                 self.find_occupancy_for_route(router_res_length.meta),
                 agent_ind)
 
-        router_res_speeds = CustomRouter.route_by_max_speed(sourceID, targetID)
+        #router_res_speeds = CustomRouter.route_by_max_speed(sourceID, targetID)
+        router_res_speeds = kselectedRoutes[1]
         if len(router_res_speeds.route) > 0:
             self.create_output_files(
                 history_prefs[self.id]["max_speed"],
@@ -161,7 +164,8 @@ class Car:
                 self.find_occupancy_for_route(router_res_speeds.meta),
                 agent_ind)
 
-        router_res_length_and_speeds = CustomRouter.minimalRoute(sourceID, targetID)
+        #router_res_length_and_speeds = CustomRouter.minimalRoute(sourceID, targetID)
+        router_res_length_and_speeds = kselectedRoutes[2]
         if len(router_res_length_and_speeds.route) > 0:
             self.create_output_files(
                 history_prefs[self.id]["balanced"],

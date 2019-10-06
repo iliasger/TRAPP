@@ -104,7 +104,7 @@ class Simulation(object):
                     print str(removedCarId) + "\treached its destination at tick " + str(cls.tick)
                 CarRegistry.findById(removedCarId).setArrived(cls.tick)
 
-            CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
+            #CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
 
             if (cls.tick % 100) == 0:
                 info("Simulation -> Step:" + str(cls.tick) + " # Driving cars: " + str(
