@@ -3,36 +3,65 @@ Manhattan
 10000 cars
 # Nodes: 6758 / Edges: 12658
 # Total street length: 1,075,285 m
-density (cars / total street length) = 0.0093
+car density (cars / total street length) = 0.0093
+average street size (total street length / edges) = 84 m
+# Max street size: 2777.75
+# Min street size: 0.1
+# Edges / total length: 0.0117717613023
+# Nodes / total length: 0.0062848445948
+# total length / Nodes: 159.112923942
+# edges / Nodes : 1.87303936076
+# Nodes / edges : 0.533891610049
 ~20% increase in LC from b=1 to b=0
 ~50% decrease in GC from b=1 to b=0
-
 
 Duluth
 =========
 14000 cars
 # Nodes: 5607 / Edges: 14317
 # Total street length: 2,142,437 m
-density (cars / total street length) = 0.0065
+car density (cars / total street length) = 0.0065
+average street size (total street length / edges) = 149 m
+# Max street size: 5460.62
+# Min street size: 0.1
+# Edges / total length: 0.00668257480742
+# Nodes / total length: 0.0026171123102
+# total length / Nodes: 382.100529695
+# edges / Nodes : 2.55341537364
+# Nodes / edges : 0.391632325208
 ~30% increase in LC from b=1 to b=0
 ~34% decrease in GC from b=1 to b=0
-
-
-Boulder
-=========
-13000 cars
-# Nodes: 7740 / Edges: 16625
-# Total street length: 1,244,896 m
-density (cars / total street length) = 0.0104
-~77% increase in LC from b=1 to b=0
-~33% decrease in GC from b=1 to b=0
-
 
 Annapolis
 =========
 8000 cars
 # Nodes: 2555 / Edges: 5691
 # Total street length: 543,028 m
-density (cars / total street length) = 0.0147
+car density (cars / total street length) = 0.0147
+average street size (total street length / edges) = 95 m
+# Max street size: 2764.16
+# Min street size: 0.1
+# Edges / total length: 0.010480119291
+# Nodes / total length: 0.00470509660668
+# total length / Nodes: 212.53548728
+# edges / Nodes : 2.22739726027
+# Nodes / edges : 0.448954489545
 ~66% increase in LC from b=1 to b=0
 ~20% decrease in GC from b=1 to b=0
+
+Boulder
+=========
+13000 cars
+# Nodes: 7740 / Edges: 16625
+# Total street length: 1,244,896 m
+car density (cars / total street length) = 0.0104
+average street size (total street length / edges) = 74 m
+# Max street size: 4424.57
+# Min street size: 0.1
+# Edges / total length: 0.0133545263173
+# Nodes / total length: 0.00621738548546
+# total length / Nodes: 160.83931137
+# edges / Nodes : 2.14793281654
+# Nodes / edges : 0.465563909774
+~77% increase in LC from b=1 to b=0
+~33% decrease in GC from b=1 to b=0
