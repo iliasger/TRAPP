@@ -23,6 +23,7 @@ class Network(object):
     edgeIds = None
     passenger_edges = None
     routingEdges = None
+    volumeMap = {}
 
     @classmethod
     def loadNetwork(cls):
@@ -41,6 +42,8 @@ class Network(object):
         cls.edges = net.getEdges(withInternal=False)
         cls.passenger_edges = [e for e in net.getEdges(withInternal=False) if e.allows("passenger")]
         cls.routingEdges = map(lambda x: RoutingEdge(x), cls.passenger_edges)
+        for i in cls.edgeIds:
+            cls.volumeMap[i] = 0
 
     @classmethod
     def nodesCount(cls):

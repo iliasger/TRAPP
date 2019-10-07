@@ -48,6 +48,8 @@ class Car:
         self.smartCar = True
         # number of ticks since last reroute / arrival
         self.lastRerouteCounter = 0
+        # current street holds the current edge the car is on. if it changes we set the volume map in carregistry
+        self.currentStreetID = 0
 
         self.driver_preference = [key for key, value in sorted(history_prefs[self.id].iteritems(), key=lambda (k,v): (v,k))][0]
 
@@ -293,3 +295,25 @@ class Car:
     def remove(self):
         """" removes this car from the sumo simulation through traci """
         traci.vehicle.remove(self.id)
+
+    
+    def checkRouteChange(self):
+        cStreetID = traci.vehicle.getRoadID(self.id)
+        if cStreetID not in Network.edgeIds:
+            routeindex = traci.vehicle.getRouteIndex(self.id)
+            if (routeindex < 0):
+                # car is not yet in the map
+                return False
+            else:
+                cStreetID = traci.vehicle.getRoute(self.id)[routeindex]
+
+        if self.currentStreetID == 0: #first invocation
+            self.currentStreetID = cStreetID
+            return False
+        else:
+            if (self.currentStreetID == cStreetID):
+                return False
+            else:
+                self.currentStreetID = cStreetID
+                return cStreetID
+        
