@@ -296,10 +296,16 @@ class Car:
         """" removes this car from the sumo simulation through traci """
         traci.vehicle.remove(self.id)
 
-    
-    def checkRouteChange(self):
+
+        
+    def checkStreetCrossed(self):
+        """
+        This method check if the car has left the edge and entered a new one.
+        @return: edgeID of the street that car passed through or False otherwise
+        """
         cStreetID = traci.vehicle.getRoadID(self.id)
         if cStreetID not in Network.edgeIds:
+            return False  # returning false here if we dont get the edge
             routeindex = traci.vehicle.getRouteIndex(self.id)
             if (routeindex < 0):
                 # car is not yet in the map
@@ -314,6 +320,7 @@ class Car:
             if (self.currentStreetID == cStreetID):
                 return False
             else:
+                passedStreet = self.currentStreetID
                 self.currentStreetID = cStreetID
-                return cStreetID
+                return passedStreet
         

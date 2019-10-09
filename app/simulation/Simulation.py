@@ -104,8 +104,9 @@ class Simulation(object):
                     print str(removedCarId) + "\treached its destination at tick " + str(cls.tick)
                 CarRegistry.findById(removedCarId).setArrived(cls.tick)
 
-            #CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
-            cls.setStreetVolume()
+            if (Config.evaluate_streetutilization == True):
+                #CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
+                cls.setStreetVolume()
 
             if (cls.tick % 100) == 0:
                 info("Simulation -> Step:" + str(cls.tick) + " # Driving cars: " + str(
@@ -115,6 +116,9 @@ class Simulation(object):
 
             if Config.simulation_horizon == cls.tick:
                 print("Simulation horizon reached!")
+                if Config.evaluate_streetutilization:
+                    """writing usful objects from memory into the file"""
+                    cls.logStreetVolumes()
                 return
 
             if (cls.tick % Config.adaptation_period) == 0:
@@ -125,9 +129,26 @@ class Simulation(object):
 
     @classmethod
     def setStreetVolume(cls):
+        """
+        Iterate through all the cars and check if
+        car has crossed the street and maintain the count in a map
+        """
         for car, carObj in CarRegistry.cars.iteritems():
-            result = carObj.checkRouteChange()
-            if result == False:
-                print("%s no change" % (car))
+            streetCrossed = carObj.checkStreetCrossed()
+            if streetCrossed == False:
+                pass
             else:
-                print("%s %s" % (car, result))
+                Network.volumeMap[streetCrossed] += 1
+
+    @classmethod
+    def logStreetVolumes(cls):
+        """
+        Log street uilization in the volume.csv file
+        """
+        streetarr = []
+        carscrossarr = []
+        for streets, carsCrossed in Network.volumeMap.iteritems():
+            streetarr.append(streets)
+            carscrossarr.append(carsCrossed)
+        CSVLogger.logEvent("volume", [street for street in streetarr])
+        CSVLogger.logEvent("volume", [carscros for carscros in carscrossarr])

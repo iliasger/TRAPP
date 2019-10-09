@@ -28,6 +28,8 @@ def remove_overhead_and_streets_files():
         os.remove("data/overheads.csv")
     if os.path.exists("data/streets.csv"):
         os.remove("data/streets.csv")
+    if os.path.exists("data/volume.csv"):
+        os.remove("data/volume.csv")
 
 def prepare_epos_input_data_folders():
     if not os.path.exists("datasets"):
