@@ -1,5 +1,5 @@
 import sumolib
-
+import numpy as np
 from app import Config
 from app.routing.RoutingEdge import RoutingEdge
 
@@ -43,7 +43,7 @@ class Network(object):
         cls.passenger_edges = [e for e in net.getEdges(withInternal=False) if e.allows("passenger")]
         cls.routingEdges = map(lambda x: RoutingEdge(x), cls.passenger_edges)
         for i in cls.edgeIds:
-            cls.volumeMap[i] = 0
+            cls.volumeMap[i] = np.zeros(Config.simulation_horizon + 1)
 
     @classmethod
     def nodesCount(cls):

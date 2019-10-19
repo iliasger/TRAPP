@@ -16,6 +16,7 @@ from app.logging import CSVLogger
 import app.Util as Util
 from app.adaptation import perform_adaptation
 from app.adaptation import Knowledge
+import numpy as np
 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
@@ -106,7 +107,7 @@ class Simulation(object):
 
             if (Config.evaluate_streetutilization == True):
                 #CSVLogger.logEvent("streets", [cls.tick] + [traci.edge.getLastStepVehicleNumber(edge.id)*CarRegistry.vehicle_length / edge.length for edge in Network.routingEdges])
-                cls.setStreetVolume()
+                cls.setStreetVolume(cls.tick)
 
             if (cls.tick % 100) == 0:
                 info("Simulation -> Step:" + str(cls.tick) + " # Driving cars: " + str(
@@ -128,7 +129,7 @@ class Simulation(object):
                 CarRegistry.do_epos_planning(cls.tick)
 
     @classmethod
-    def setStreetVolume(cls):
+    def setStreetVolume(cls, tickCount):
         """
         Iterate through all the cars and check if
         car has crossed the street and maintain the count in a map
@@ -138,7 +139,7 @@ class Simulation(object):
             if streetCrossed == False:
                 pass
             else:
-                Network.volumeMap[streetCrossed] += 1
+                Network.volumeMap[streetCrossed][tickCount] = 1
 
     @classmethod
     def logStreetVolumes(cls):
@@ -151,4 +152,6 @@ class Simulation(object):
             streetarr.append(streets)
             carscrossarr.append(carsCrossed)
         CSVLogger.logEvent("volume", [street for street in streetarr])
-        CSVLogger.logEvent("volume", [carscros for carscros in carscrossarr])
+        carscrossnp = np.array(carscrossarr).transpose()
+        for ticklist in carscrossnp:
+            CSVLogger.logEvent("volume", [carscros for carscros in ticklist])
