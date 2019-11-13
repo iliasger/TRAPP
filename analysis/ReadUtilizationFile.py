@@ -32,4 +32,37 @@ def aggregateChunks(num):
         CSVLogger.logEvent(path_to_write, [sum for sum in sumChunks[i]])
 
 
-aggregateChunks(100)
+def aggregateAllCapacities():
+    #path_to_csv = "data/volume_tick.csv"
+    path_to_csv = [
+        "data/capacity1_3000cars_800tiks.csv",
+        "data/capacity2_3000cars_800tiks.csv",
+        "data/capacity3_3000cars_800tiks.csv"
+        ]
+    path_to_write = "MainCapacity"
+    aggregatedData = []
+    for findex in range(len(path_to_csv)):
+        edges = []
+        floatData = []
+        with open(path_to_csv[findex], 'r') as util_file:
+            utilfiles=util_file.readlines()
+        edges = utilfiles.pop(0)
+        for rows in range(len(utilfiles)):  
+            floatRow = map(lambda i : float(i), [x for x in utilfiles[rows].split(',')])
+            floatData.append(floatRow)
+
+        npData = np.array(floatData)
+        if len(aggregatedData) == 0:
+            aggregatedData = npData
+        else:
+            aggregatedData = np.maximum(aggregatedData, npData)
+
+    CSVLogger.logEvent(path_to_write, [edges])
+    for i in range(len(aggregatedData)):
+        CSVLogger.logEvent(path_to_write, [sum for sum in aggregatedData[i]])
+
+
+
+print("aggregating data")
+#aggregateChunks(100)
+aggregateAllCapacities()
