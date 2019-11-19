@@ -11,6 +11,7 @@ from app.routing.RouterResult import RouterResult
 from app.adaptation import Knowledge
 from app.entity.CarHistory import history_prefs
 from app import Config
+from app.analysis.UtilizationCapacity import UtilizationCapacity
 
 class Car:
     """ a abstract class of something that is driving around in the streets """
@@ -146,33 +147,39 @@ class Car:
         return True
 
     def create_epos_output_files(self, sourceID, targetID, tick, agent_ind):
-        kselectedRoutes = CustomRouter.route_by_kSelection(self.sourceID, self.targetID)
+        kselectedRoutes = CustomRouter.route_by_kSelection(sourceID, targetID)
 
         #router_res_length = CustomRouter.route_by_min_length(sourceID, targetID)
         router_res_length = kselectedRoutes[0]
         if len(router_res_length.route) > 0:
             self.create_output_files(
-                history_prefs[self.id]["min_length"],
+                # history_prefs[self.id]["min_length"],
+                1,
                 router_res_length.route,
-                self.find_occupancy_for_route(router_res_length.meta),
+                #self.find_occupancy_for_route(router_res_length.meta),
+                self.find_occupancy_for_route_via_utilization(router_res_length.meta),
                 agent_ind)
 
         #router_res_speeds = CustomRouter.route_by_max_speed(sourceID, targetID)
         router_res_speeds = kselectedRoutes[1]
         if len(router_res_speeds.route) > 0:
             self.create_output_files(
-                history_prefs[self.id]["max_speed"],
+                #history_prefs[self.id]["max_speed"],
+                2,
                 router_res_speeds.route,
-                self.find_occupancy_for_route(router_res_speeds.meta),
+                #self.find_occupancy_for_route(router_res_speeds.meta),
+                self.find_occupancy_for_route_via_utilization(router_res_speeds.meta),
                 agent_ind)
 
         #router_res_length_and_speeds = CustomRouter.minimalRoute(sourceID, targetID)
         router_res_length_and_speeds = kselectedRoutes[2]
         if len(router_res_length_and_speeds.route) > 0:
             self.create_output_files(
-                history_prefs[self.id]["balanced"],
+                #history_prefs[self.id]["balanced"],
+                3,
                 router_res_length_and_speeds.route,
-                self.find_occupancy_for_route(router_res_length_and_speeds.meta),
+                #self.find_occupancy_for_route(router_res_length_and_speeds.meta),
+                self.find_occupancy_for_route_via_utilization(router_res_length_and_speeds.meta),
                 agent_ind)
 
     def create_output_files(self, cost, route, all_routes, agent_ind):
@@ -286,6 +293,84 @@ class Car:
             else:
                 percentage = time/interval
                 occupancy = vehicle_length*percentage/length
+                if occupancy < 0:
+                    raise RuntimeError
+                streets_for_interval[m["edgeID"]] = occupancy
+
+        return all_streets
+
+    def find_occupancy_for_route_via_utilization(self, meta):
+
+        from app.entity.CarRegistry import CarRegistry
+
+        interval = Knowledge.planning_step_horizon
+        all_streets = []
+        trip_time = 0
+        checkpoint_index = 1
+        streets_for_interval = {}
+        all_streets.append(streets_for_interval)
+
+        vehicle_length = CarRegistry.vehicle_length
+
+        for m in meta:
+            time =  m["length"]/ m["maxSpeed"]
+            length = m["length"]
+
+            trip_time += time
+            next_checkpoint = interval * checkpoint_index
+
+            if trip_time > next_checkpoint :
+                surplus_time = trip_time - next_checkpoint
+                checkpoint_index += 1
+                time = time - surplus_time
+                percentage = time/interval
+                #occupancy = vehicle_length*percentage/length
+                utilizations = UtilizationCapacity.getAggregateSpanFromMemory()
+                capacity = utilizations.get(m["edgeID"])
+                occupancy = 0
+                if capacity != None and capacity > 0:
+                    occupancy = 1/(capacity * percentage)
+                if occupancy < 0:
+                    raise RuntimeError
+
+                streets_for_interval[m["edgeID"]] = occupancy
+
+                while surplus_time > interval:
+                    streets_for_interval = {}
+                    all_streets.append(streets_for_interval)
+                    #occupancy = vehicle_length/length
+                    utilizations = UtilizationCapacity.getAggregateSpanFromMemory()
+                    capacity = utilizations.get(m["edgeID"])
+                    occupancy = 0
+                    if capacity != None and capacity > 0:
+                        occupancy = 1/(capacity)
+                    if occupancy < 0:
+                        raise RuntimeError
+                    streets_for_interval[m["edgeID"]] = occupancy
+                    surplus_time -= interval
+                    checkpoint_index += 1
+
+                streets_for_interval = {}
+                all_streets.append(streets_for_interval)
+                percentage_surplus = surplus_time/interval
+                #occupancy = vehicle_length*percentage_surplus/length
+                utilizations = UtilizationCapacity.getAggregateSpanFromMemory()
+                capacity = utilizations.get(m["edgeID"])
+                occupancy = 0
+                if capacity != None and capacity > 0:
+                    occupancy = 1/(capacity * percentage_surplus)
+                if occupancy < 0:
+                    raise RuntimeError
+                streets_for_interval[m["edgeID"]] = occupancy
+
+            else:
+                percentage = time/interval
+                #occupancy = vehicle_length*percentage/length
+                utilizations = UtilizationCapacity.getAggregateSpanFromMemory()
+                capacity = utilizations.get(m["edgeID"])
+                occupancy = 0
+                if capacity != None and capacity > 0:
+                    occupancy = 1/(capacity * percentage)
                 if occupancy < 0:
                     raise RuntimeError
                 streets_for_interval[m["edgeID"]] = occupancy

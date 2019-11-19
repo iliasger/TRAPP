@@ -9,6 +9,8 @@ from app import Config
 from app.entity.CarRegistry import CarRegistry
 from app.logging import info
 from app.routing.CustomRouter import CustomRouter
+#from app.analysis.ReadUtilizationFile import UtilizationCapacity
+from app.analysis.UtilizationCapacity import UtilizationCapacity
 import time
 
 from app.logging import CSVLogger
@@ -46,6 +48,9 @@ class Simulation(object):
 
     @classmethod
     def start(cls):
+        # load capacities into the memory
+        UtilizationCapacity.aggregateSpanInMemory(Config.planning_step_horizon, UtilizationCapacity.chunkNo)
+        UtilizationCapacity.chunkNo += 1
 
         Knowledge.planning_period = Config.planning_period
         Knowledge.planning_step_horizon = Config.planning_step_horizon
@@ -126,6 +131,8 @@ class Simulation(object):
                 perform_adaptation(cls.tick)
 
             if (cls.tick % Knowledge.planning_period) == 0:
+                UtilizationCapacity.aggregateSpanInMemory(Config.planning_step_horizon, UtilizationCapacity.chunkNo)
+                UtilizationCapacity.chunkNo += 1
                 CarRegistry.do_epos_planning(cls.tick)
 
     @classmethod
