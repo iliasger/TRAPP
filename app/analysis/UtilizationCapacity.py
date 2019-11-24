@@ -25,6 +25,22 @@ class UtilizationCapacity(object):
         npData = np.array(floatData)
         return (npData, edges)
 
+    @classmethod
+    def getNpDataPath(cls, pathToCsv):
+        #path_to_csv = "data/volume_tick.csv"
+        path_to_csv = pathToCsv
+        #data = np.genfromtxt(path_to_csv, dtype=int, delimiter=',', names=False)
+        floatData = []
+        with open(path_to_csv, 'r') as util_file:
+            utilfiles=util_file.readlines()
+        edges = utilfiles.pop(0)
+        for rows in range(len(utilfiles)):  
+            floatRow = map(lambda i : float(i), [x for x in utilfiles[rows].split(',')])
+            floatData.append(floatRow)
+
+        npData = np.array(floatData)
+        return (npData, edges)
+
 
     @classmethod
     def aggregateAll(cls):
@@ -88,6 +104,11 @@ class UtilizationCapacity(object):
         for i in range(len(aggregatedData)):
             CSVLogger.logEvent(path_to_write, [sum for sum in aggregatedData[i]])
 
+    @classmethod
+    def utilizationFromVolumeCapacity(cls):
+        capacity = cls.getNpData()
+        volume = cls.getNpDataPath('data/a1-b0/volume.csv')
+        print("helloworld")
 
 
     #print("aggregating data")
