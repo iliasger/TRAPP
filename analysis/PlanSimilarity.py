@@ -22,7 +22,7 @@ class PlanSimilarity(object):
         if(os.path.exists('analysis/similarity_analysis.csv')):
             os.remove('analysis/similarity_analysis.csv')
             with open('analysis/similarity_analysis.csv', 'a') as summary:
-                summary.write('Plan file, plan diff, Entropy, Cosine, Hamming Similarity, Hamming Dist, Euclidean\n')
+                summary.write('Plan file, plan diff, Entropy, Cosine, Hamming Similarity, Hamming Dist, Euclidean, Jaccard\n')
 
     @classmethod
     def _readPlans(cls):
@@ -45,14 +45,14 @@ class PlanSimilarity(object):
     def executePlans(cls, fileName, plans):
         entropy = cls.calculateEntropy()['similarity']
         cosine = cls.calculateCosineSimilarity()['similarity']
-        #cls.JaccardSimilarity()
+        jaccard = cls.JaccardSimilarity1()['similarity']
         euclidean = cls.calculateEuclideanDistance()['distance']
         hamming = cls.calculateHammingDistance()
         hammingSimilarity = hamming['similarity']
         hammingDist = hamming['distance']
-        csv_details = ('%s , s1-s2, %f, %f, %f, %f, %f \n' %(fileName, entropy[0], cosine[0], hammingSimilarity[0], hammingDist[0], euclidean[0]))
-        csv_details += ('%s , s1-s3, %f, %f, %f, %f, %f \n' %(fileName, entropy[1], cosine[1], hammingSimilarity[1], hammingDist[1], euclidean[1]))
-        csv_details += ('%s , s2-s3, %f, %f, %f, %f, %f \n' %(fileName, entropy[2], cosine[2], hammingSimilarity[2], hammingDist[2], euclidean[2]))
+        csv_details = ('%s , s1-s2, %f, %f, %f, %f, %f, %f \n' %(fileName, entropy[0], cosine[0], hammingSimilarity[0], hammingDist[0], euclidean[0], jaccard[0]))
+        csv_details += ('%s , s1-s3, %f, %f, %f, %f, %f, %f \n' %(fileName, entropy[1], cosine[1], hammingSimilarity[1], hammingDist[1], euclidean[1], jaccard[0]))
+        csv_details += ('%s , s2-s3, %f, %f, %f, %f, %f, %f \n' %(fileName, entropy[2], cosine[2], hammingSimilarity[2], hammingDist[2], euclidean[2], jaccard[0]))
         return csv_details  
 
     @classmethod
@@ -177,6 +177,19 @@ class PlanSimilarity(object):
             #"similarity": ( (1-d1)*100, (1-d2)*100, (1-d3)* 100 ),
             "similarity": ( (1-n1)*100, (1-n2)*100, (1-n3)* 100 ),
             "distance": ( d1, d2, d3 )
+        }
+        return resObj
+
+    @classmethod
+    def JaccardSimilarity1(cls):
+        s1 = set(cls.filePlans[0])
+        s2 = set(cls.filePlans[1])
+        s3 = set(cls.filePlans[2])
+        d1 = len(s1.intersection(s2)) / len(s1.union(s2))
+        d2 = len(s1.intersection(s3)) / len(s1.union(s3))
+        d3 = len(s2.intersection(s3)) / len(s2.union(s3))
+        resObj = {
+            "similarity" : (d1, d2, d3)
         }
         return resObj
 
