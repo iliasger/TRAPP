@@ -1,7 +1,11 @@
 import numpy as np
 from app.logging import CSVLogger
 
-
+"""
+    NOTE : This class is for the purpose of running standalone.
+    `UtilizationCapacity.py` is the file which a copy of this file
+    that is integrated in TRAPP.
+"""
 class UtilizationCapacity(object):
 
     path_to_write = "volume"
@@ -24,9 +28,11 @@ class UtilizationCapacity(object):
         npData = np.array(floatData)
         return (npData, edges)
 
-
     @classmethod
     def getNpDataCustom(cls, pathToCsv):
+        """ This method is the copy of getNpData except that
+            it takes the file path from the argument
+         """
         #path_to_csv = "data/volume_tick.csv"
         path_to_csv = pathToCsv
         #data = np.genfromtxt(path_to_csv, dtype=int, delimiter=',', names=False)
@@ -116,8 +122,25 @@ class UtilizationCapacity(object):
             CSVLogger.logEvent(utlPath, [sum for sum in utilization[i]])
         print("aggregated")
 
+    @classmethod
+    def evaluateUtilization(cls):
+        """ This method evaluate the street utilization by summing 
+        volume file along y axis and then dividing by capacity along y axis
+        street utilization = volume/capacity
+        """
+        npData, edges = cls.getNpData()
+        totalCapacity = npData.sum(axis=0)
+        npVolume, edges = cls.getNpDataCustom("data/volume.csv")
+        totalVolume =  npVolume.sum(axis=0)
+        streetUtilization = np.divide(totalVolume, totalCapacity, out=np.zeros_like(totalVolume), where=totalCapacity!=0)
+        CSVLogger.logEvent("streetUtilization", [edges])
+        CSVLogger.logEvent("streetUtilization", [sum for sum in streetUtilization])        
 
-UtilizationCapacity.utilizationFromVolumeCapacity()
+
+
+
+UtilizationCapacity.evaluateUtilization()
+#UtilizationCapacity.utilizationFromVolumeCapacity()
     #print("aggregating data")
     #aggregateChunks(100)
     #aggregateAllCapacities()
