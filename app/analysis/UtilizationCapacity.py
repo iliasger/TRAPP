@@ -110,6 +110,21 @@ class UtilizationCapacity(object):
         volume = cls.getNpDataPath('data/a1-b0/volume.csv')
         print("helloworld")
 
+    @classmethod
+    def evaluateUtilization(cls):
+        """ This method evaluate the street utilization by summing 
+        volume file along y axis and then dividing by capacity along y axis
+        street utilization = volume/capacity
+        """
+        npData, edges = cls.getNpData()
+        totalCapacity = npData.sum(axis=0)
+        npVolume, edges = cls.getNpDataPath("data/volume.csv")
+        totalVolume =  npVolume.sum(axis=0)
+        streetUtilization = np.divide(totalVolume, totalCapacity, out=np.zeros_like(totalVolume), where=totalCapacity!=0)
+        CSVLogger.logEvent("streetUtilization", [edges])
+        CSVLogger.logEvent("streetUtilization", [sum for sum in streetUtilization])        
+
+
 
     #print("aggregating data")
     #aggregateChunks(100)

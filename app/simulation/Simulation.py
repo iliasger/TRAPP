@@ -48,7 +48,9 @@ class Simulation(object):
 
     @classmethod
     def start(cls):
-        # load capacities into the memory
+        # reset variables and load capacities into the memory
+        UtilizationCapacity.currentUtilSpan = {}
+        UtilizationCapacity.chunkNo = 0
         UtilizationCapacity.aggregateSpanInMemory(Config.planning_step_horizon, UtilizationCapacity.chunkNo)
         UtilizationCapacity.chunkNo += 1
 
@@ -162,3 +164,6 @@ class Simulation(object):
         carscrossnp = np.array(carscrossarr).transpose()
         for ticklist in carscrossnp:
             CSVLogger.logEvent("volume", [carscros for carscros in ticklist])
+        
+        # log street utilization
+        UtilizationCapacity.evaluateUtilization()
