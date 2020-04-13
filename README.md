@@ -37,7 +37,7 @@ TRAPP framework for Traffic Reconfiguration via Adaptive Participatory Planning
 
 1. Set `SUMO_HOME` environment variable the folder of your SUMO intallation.
 	* Hint: If SUMO is installed via the regular distribution in debian/ubuntu, it is installed at `/usr/share/sumo`.
-	* Hint 2: On Mac OSX look at /usr/local/opt/sumo@X.X
+	* Hint 2: On Mac OSX look at `/usr/local/opt/sumo@X.X`
 
 1. Clone the latest TRAPP version from github via `git clone https://github.com/iliasger/TRAPP.git`
 
